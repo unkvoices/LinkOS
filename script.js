@@ -1,3 +1,14 @@
+let appName = document.querySelector(".app_name");
+
+
+
+
+
+
+
+
+
+
 function generateQR() {
   const text = document.getElementById("text").value;
   const qrContainer = document.getElementById("qrcode");

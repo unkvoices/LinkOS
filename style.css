@@ -18,19 +18,43 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+
+}
+
+html {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 }
 
-html {}
-
 body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: var(--color1);
   color: var(--color6);
   text-align: center;
 }
 
 .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 96%;
+
+  height: auto;
+  padding: 20px;
+  border: solid #fff;
   margin-top: 50px;
+}
+
+.containerElement {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 }
 
 input {
