@@ -1,6 +1,7 @@
 const qrContainer = document.querySelector("#qrcode");
 const generateButton = document.querySelector("#gr_Gen");
 const downloadButton = document.querySelector(".downloadBtn");
+const shareButton = document.querySelector("#share_btn");
 const textInput = document.querySelector("#text");
 const wifiFields = document.querySelector("#wifiFields");
 const wifiSsidInput = document.querySelector("#wifiSsid");
@@ -21,6 +22,8 @@ const optionCarousel = document.querySelector(".optionCarousel");
 const directionButtons = document.querySelectorAll(".directionBtn");
 const positionButtons = document.querySelectorAll(".positionBtn");
 const clearButton = document.querySelector("#clear_btn");
+const historyList = document.querySelector("#historyList");
+const clearHistoryBtn = document.querySelector("#clear_history");
 
 const QR_EXPORT_SIZE = 1000;
 const QR_PREVIEW_SIZE = 240;
@@ -30,6 +33,7 @@ const DEFAULT_DIRECTION = "diagonal";
 const DEFAULT_WATERMARK_POSITION = "bottom-right";
 const MAX_WA_MESSAGE_LENGTH = 250; // Limite de caracteres para a mensagem do WhatsApp
 const WATERMARK_PATH = "assets/linkos-watermark.png";
+const MAX_HISTORY = 5;
 
 const QR_PRESETS = {
   frost: {
@@ -119,6 +123,71 @@ function getSelectedMode() {
 function setStatus(message, isError = false) {
   statusMessage.textContent = message;
   statusMessage.classList.toggle("error", isError);
+}
+
+function addToHistory(payload, mode) {
+  let history = JSON.parse(localStorage.getItem("linkos_history") || "[]");
+  const newItem = {
+    payload,
+    mode,
+    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    date: new Date().toLocaleDateString()
+  };
+  
+  // Evita duplicados consecutivos
+  if (history.length > 0 && history[0].payload === payload) return;
+
+  history.unshift(newItem);
+  history = history.slice(0, MAX_HISTORY);
+  localStorage.setItem("linkos_history", JSON.stringify(history));
+  renderHistory();
+}
+
+function renderHistory() {
+  const history = JSON.parse(localStorage.getItem("linkos_history") || "[]");
+  if (history.length === 0) {
+    historyList.innerHTML = '<p class="emptyHistory">Nenhum QR code gerado ainda.</p>';
+    return;
+  }
+
+  historyList.innerHTML = history.map((item, index) => `
+    <div class="historyItem" onclick="loadHistoryItem(${index})">
+      <span>${item.mode.toUpperCase()}: ${item.payload.substring(0, 20)}${item.payload.length > 20 ? '...' : ''}</span>
+      <small>${item.timestamp}</small>
+    </div>
+  `).join('');
+}
+
+window.loadHistoryItem = (index) => {
+  const history = JSON.parse(localStorage.getItem("linkos_history") || "[]");
+  const item = history[index];
+  if (!item) return;
+
+  // Restaurar o modo
+  const radio = document.querySelector(`input[name="qrType"][value="${item.mode}"]`);
+  if (radio) {
+    radio.checked = true;
+    updateModeFields(item.mode);
+  }
+
+  // Restaurar payload (simplificado: joga no campo de texto se não for wifi)
+  if (item.mode !== 'wifi') {
+    textInput.value = item.payload;
+  }
+  
+  generateQrCode();
+};
+
+async function shareQrCode() {
+  if (!lastGeneratedPayload) return;
+  const canvas = await createWatermarkedCanvas(lastGeneratedPayload, QR_EXPORT_SIZE);
+  canvas.toBlob(async (blob) => {
+    const file = new File([blob], "qrcode.png", { type: "image/png" });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], title: 'Meu QR Code', text: 'Gerado via linkOS' }); }
+      catch (err) { console.error("Erro ao compartilhar:", err); }
+    } else { setStatus("Seu navegador não suporta compartilhamento de arquivos.", true); }
+  });
 }
 
 function saveState() {
@@ -583,8 +652,10 @@ async function generateQrCode() {
 
   lastGeneratedPayload = payload;
   downloadButton.disabled = false;
+  shareButton.disabled = false;
   setStatus("QR code gerado com sucesso.");
   saveState();
+  addToHistory(payload, getSelectedMode());
 }
 
 async function downloadQrCode() {
@@ -711,6 +782,7 @@ function clearAllFields() {
   qrContainer.innerHTML = "";
   lastGeneratedPayload = "";
   downloadButton.disabled = true;
+  shareButton.disabled = true;
   generateButton.disabled = false;
   localStorage.removeItem("linkos_state");
 
@@ -773,6 +845,12 @@ textInput.addEventListener("keydown", (event) => {
     event.preventDefault();
     void generateQrCode();
   }
+});
+
+shareButton.addEventListener("click", shareQrCode);
+clearHistoryBtn.addEventListener("click", () => {
+  localStorage.removeItem("linkos_history");
+  renderHistory();
 });
 
 clearButton.addEventListener("click", clearAllFields);
@@ -844,4 +922,5 @@ syncActiveDirection();
 syncActivePosition();
 syncActiveOptionTab("directionPanel");
 updateModeFields(getSelectedMode());
+renderHistory();
 loadState();

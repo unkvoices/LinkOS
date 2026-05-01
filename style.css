@@ -696,6 +696,96 @@ header {
   padding: 18px;
 }
 
+.actionButtons {
+  display: flex;
+  gap: 12px;
+  width: min(100%, 360px);
+}
+
+.shareBtn {
+  flex: 1;
+  min-height: 48px;
+  padding: 10px 20px;
+  font-weight: 600;
+  border-radius: 999px;
+  border: 1px solid rgba(12, 184, 207, 0.4);
+  color: #fff;
+  background: linear-gradient(180deg, rgba(12, 184, 207, 0.25), rgba(8, 127, 143, 0.2));
+  cursor: pointer;
+  transition: all 160ms ease;
+}
+
+.shareBtn:hover:not(:disabled) {
+  background: rgba(12, 184, 207, 0.35);
+  transform: translateY(-1px);
+}
+
+.shareBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.historyPanel {
+  margin-top: 8px;
+  padding: 16px;
+}
+
+.historyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.textBtn {
+  background: none;
+  border: none;
+  color: var(--c1);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.historyItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 160ms ease;
+}
+
+.historyItem:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.historyItem span {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.historyItem small {
+  opacity: 0.5;
+  font-size: 0.75rem;
+}
+
+.emptyHistory {
+  text-align: center;
+  opacity: 0.5;
+  font-size: 0.9rem;
+  padding: 10px;
+}
+
 #qrcode img,
 #qrcode canvas {
   display: block;
