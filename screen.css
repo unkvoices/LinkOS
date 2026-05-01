@@ -50,7 +50,9 @@
 
   .containerElement input,
   .containerElement button,
-  .downloadBtn {
+  .downloadBtn,
+  .colorPalette,
+  .gradientDirection {
     width: 100%;
   }
 
@@ -128,6 +130,15 @@
 
   .downloadBtn {
     width: 100%;
+  }
+
+  .colorPalette,
+  .gradientDirection {
+    padding-inline: 14px;
+  }
+
+  .directionOptions {
+    flex-direction: column;
   }
 }
 

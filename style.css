@@ -57,7 +57,8 @@ header {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  background: linear-gradient(180deg, rgba(58, 2, 2, 0.92), rgba(58, 2, 2, 0.72));
+  background: var(--c3);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
@@ -207,7 +208,7 @@ header {
   justify-content: center;
 }
 
-#modeElement > label {
+#modeElement>label {
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -221,7 +222,7 @@ header {
   transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
 }
 
-#modeElement > label:hover {
+#modeElement>label:hover {
   border-color: rgba(12, 184, 207, 0.35);
   background: rgba(12, 184, 207, 0.08);
 }
@@ -230,7 +231,7 @@ header {
   accent-color: var(--c1);
 }
 
-#modeElement > label:has(input:checked) {
+#modeElement>label:has(input:checked) {
   border-color: rgba(12, 184, 207, 0.7);
   background: linear-gradient(180deg, rgba(12, 184, 207, 0.18), rgba(12, 184, 207, 0.08));
   box-shadow: 0 0 0 1px rgba(12, 184, 207, 0.16) inset;
@@ -241,6 +242,182 @@ header {
   flex-direction: column;
   align-items: center;
   gap: 14px;
+}
+
+.colorPalette {
+  width: min(100%, 360px);
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 12px;
+  border-radius: 22px;
+  border: 1px solid rgba(12, 184, 207, 0.28);
+  background: linear-gradient(180deg, rgba(12, 184, 207, 0.1), rgba(8, 127, 143, 0.08));
+  color: var(--color6);
+  font-weight: 600;
+}
+
+.paletteLabel {
+  font-size: 0.95rem;
+}
+
+.paletteOptions {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.colorSwatch {
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1) inset;
+  transition: transform 160ms ease, box-shadow 160ms ease, outline-color 160ms ease;
+}
+
+.colorSwatch.is-hidden {
+  display: none;
+}
+
+.colorPalette.is-expanded .colorSwatch.is-hidden {
+  display: inline-block;
+}
+
+.colorSwatch:hover {
+  transform: translateY(-1px);
+}
+
+.colorSwatch:focus-visible {
+  outline: 2px solid rgba(12, 184, 207, 0.75);
+  outline-offset: 3px;
+}
+
+.colorSwatch.is-active {
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.12) inset,
+    0 0 0 3px rgba(12, 184, 207, 0.7);
+}
+
+.colorSwatch[data-preset="frost"] {
+  background: linear-gradient(135deg, #f4f7fb 0%, #cfd9df 48%, #8fa5b3 100%);
+}
+
+.colorSwatch[data-preset="aqua"] {
+  background: linear-gradient(135deg, #d9f8ff 0%, #0cb8cf 45%, #0a6170 100%);
+}
+
+.colorSwatch[data-preset="forest"] {
+  background: linear-gradient(135deg, #d7ffd9 0%, #38b000 45%, #14532d 100%);
+}
+
+.colorSwatch[data-preset="sunset"] {
+  background: linear-gradient(135deg, #fff0c9 0%, #ffd166 35%, #ff7b00 100%);
+}
+
+.colorSwatch[data-preset="ember"] {
+  background: linear-gradient(135deg, #ffd6d6 0%, #f23131 45%, #7a0404 100%);
+}
+
+.colorSwatch[data-preset="copper"] {
+  background: linear-gradient(135deg, #ffd7c2 0%, #ff7b00 40%, #8a3b12 100%);
+}
+
+.colorSwatch[data-preset="violet"] {
+  background: linear-gradient(135deg, #f0dbff 0%, #9d4edd 48%, #3c096c 100%);
+}
+
+.colorSwatch[data-preset="berry"] {
+  background: linear-gradient(135deg, #ffd6eb 0%, #ff4d8d 45%, #7a003c 100%);
+}
+
+.colorSwatch[data-preset="lagoon"] {
+  background: linear-gradient(135deg, #d7fff8 0%, #2ec4b6 45%, #004e64 100%);
+}
+
+.colorSwatch[data-preset="lime"] {
+  background: linear-gradient(135deg, #f4ffd2 0%, #9ef01a 45%, #4f772d 100%);
+}
+
+.colorSwatch[data-preset="gold"] {
+  background: linear-gradient(135deg, #fff7d6 0%, #ffca3a 45%, #9c6644 100%);
+}
+
+.colorSwatch[data-preset="mono"] {
+  background: linear-gradient(135deg, #fafafa 0%, #8c8c8c 50%, #101010 100%);
+}
+
+.moreColorsBtn {
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(12, 184, 207, 0.34);
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(12, 184, 207, 0.18), rgba(8, 127, 143, 0.12));
+  color: var(--color6);
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.moreColorsBtn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(12, 184, 207, 0.6);
+}
+
+.colorPalette.is-expanded .moreColorsBtn {
+  background: linear-gradient(180deg, rgba(12, 184, 207, 0.3), rgba(8, 127, 143, 0.18));
+}
+
+.gradientDirection {
+  width: min(100%, 360px);
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-radius: 22px;
+  border: 1px solid rgba(12, 184, 207, 0.28);
+  background: linear-gradient(180deg, rgba(12, 184, 207, 0.08), rgba(8, 127, 143, 0.06));
+  color: var(--color6);
+  font-weight: 600;
+}
+
+.directionLabel {
+  font-size: 0.95rem;
+}
+
+.directionOptions {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+}
+
+.directionBtn {
+  flex: 1;
+  min-height: 40px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color6);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.directionBtn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(12, 184, 207, 0.35);
+}
+
+.directionBtn.is-active {
+  border-color: rgba(12, 184, 207, 0.72);
+  background: linear-gradient(180deg, rgba(12, 184, 207, 0.18), rgba(8, 127, 143, 0.14));
+  box-shadow: 0 0 0 1px rgba(12, 184, 207, 0.18) inset;
 }
 
 #statusMessage {
@@ -260,10 +437,11 @@ header {
   width: min(100%, 360px);
   min-height: clamp(220px, 42vw, 360px);
   aspect-ratio: square;
-  border: 1px solid rgba(12, 184, 207, 0.2);
+  border: none;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  background:
-    linear-gradient(180deg, rgba(4, 55, 61, 0.88), rgba(5, 34, 38, 0.98));
+ background: none;
+  /* background:
+    linear-gradient(180deg, rgba(207, 209, 209, 0.88), rgba(122, 166, 172, 0.98), rgba(209, 217, 219, 0.98)); */
   border-radius: 20px;
   display: flex;
   align-items: center;
@@ -280,6 +458,7 @@ header {
 }
 
 .downloadBtn {
+  width: min(100%, 360px);
   min-height: 48px;
   padding: 10px 20px;
   font-weight: 600;

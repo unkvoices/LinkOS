@@ -51,6 +51,32 @@
     <div class="panel previewPanel">
       <p id="statusMessage" aria-live="polite">Escolha um tipo, digite o conteudo e gere o QR code.</p>
       <div id="qrcode" aria-label="Previa do QR code"></div>
+      <div class="colorPalette" role="group" aria-label="Paleta de cores do QR code">
+        <span class="paletteLabel">Personalizar cor</span>
+        <div class="paletteOptions">
+          <button class="colorSwatch is-active" type="button" data-preset="frost" aria-label="Frost"></button>
+          <button class="colorSwatch" type="button" data-preset="aqua" aria-label="Aqua"></button>
+          <button class="colorSwatch" type="button" data-preset="forest" aria-label="Forest"></button>
+          <button class="colorSwatch" type="button" data-preset="sunset" aria-label="Sunset"></button>
+          <button class="colorSwatch" type="button" data-preset="ember" aria-label="Ember"></button>
+          <button class="colorSwatch" type="button" data-preset="copper" aria-label="Copper"></button>
+          <button class="colorSwatch is-hidden" type="button" data-preset="violet" aria-label="Violet"></button>
+          <button class="colorSwatch is-hidden" type="button" data-preset="berry" aria-label="Berry"></button>
+          <button class="colorSwatch is-hidden" type="button" data-preset="lagoon" aria-label="Lagoon"></button>
+          <button class="colorSwatch is-hidden" type="button" data-preset="lime" aria-label="Lime"></button>
+          <button class="colorSwatch is-hidden" type="button" data-preset="gold" aria-label="Gold"></button>
+          <button class="colorSwatch is-hidden" type="button" data-preset="mono" aria-label="Mono"></button>
+          <button class="moreColorsBtn" type="button" aria-expanded="false" aria-label="Mostrar mais cores">+</button>
+        </div>
+      </div>
+      <div class="gradientDirection" role="group" aria-label="Direcao do gradiente">
+        <span class="directionLabel">Direcao</span>
+        <div class="directionOptions">
+          <button class="directionBtn is-active" type="button" data-direction="diagonal">Diagonal</button>
+          <button class="directionBtn" type="button" data-direction="vertical">Vertical</button>
+          <button class="directionBtn" type="button" data-direction="radial">Radial</button>
+        </div>
+      </div>
       <button class="downloadBtn" type="button" disabled>Download PNG</button>
     </div>
   </section>
