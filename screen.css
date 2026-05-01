@@ -31,7 +31,14 @@
   }
 
   .introBlock {
-    text-align: left;
+    text-align: center;
+    padding: 14px 8px;
+  }
+
+  .panel,
+  .inputPanel,
+  .previewPanel,
+  .qr_mode {
     gap: 6px;
   }
 

@@ -94,12 +94,19 @@ header {
   flex-direction: column;
   gap: 8px;
   text-align: center;
+  border-radius: 18px;
+  border: 1px solid var(--border-soft);
+  background: linear-gradient(180deg, rgba(22, 25, 45, 0.86), rgba(10, 13, 29, 0.96));
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+  gap: 16px;
+  padding: 16px;
+
 }
 
 .eyebrow {
-  font-size: 0.76rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.3rem;
   text-transform: uppercase;
   color: var(--c1);
 }

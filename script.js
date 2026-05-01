@@ -121,6 +121,48 @@ function setStatus(message, isError = false) {
   statusMessage.classList.toggle("error", isError);
 }
 
+function saveState() {
+  const state = {
+    mode: getSelectedMode(),
+    text: textInput.value,
+    wifi: {
+      ssid: wifiSsidInput.value,
+      pass: wifiPasswordInput.value,
+      sec: wifiSecuritySelect.value,
+      hid: wifiHiddenInput.checked
+    },
+    wa: waMessageInput.value,
+    preset: selectedPreset,
+    direction: selectedDirection,
+    position: selectedWatermarkPosition,
+    hasQr: !!lastGeneratedPayload
+  };
+  localStorage.setItem("linkos_state", JSON.stringify(state));
+}
+
+function loadState() {
+  const saved = localStorage.getItem("linkos_state");
+  if (!saved) return;
+
+  const state = JSON.parse(saved);
+  textInput.value = state.text || "";
+  wifiSsidInput.value = state.wifi?.ssid || "";
+  wifiPasswordInput.value = state.wifi?.pass || "";
+  wifiSecuritySelect.value = state.wifi?.sec || "WPA";
+  wifiHiddenInput.checked = !!state.wifi?.hid;
+  waMessageInput.value = state.wa || "";
+  
+  selectedPreset = state.preset || DEFAULT_PRESET;
+  selectedDirection = state.direction || DEFAULT_DIRECTION;
+  selectedWatermarkPosition = state.position || DEFAULT_WATERMARK_POSITION;
+
+  modeInputs.forEach(input => {
+    if (input.value === state.mode) input.checked = true;
+  });
+
+  if (state.hasQr) generateQrCode();
+}
+
 function normalizeUrl(value) {
   const trimmed = value.trim();
 
@@ -542,6 +584,7 @@ async function generateQrCode() {
   lastGeneratedPayload = payload;
   downloadButton.disabled = false;
   setStatus("QR code gerado com sucesso.");
+  saveState();
 }
 
 async function downloadQrCode() {
@@ -581,6 +624,7 @@ async function updateQrPreset(presetName) {
   }
 
   setStatus("Gradiente do QR code atualizado.");
+  saveState();
 }
 
 async function updateGradientDirection(direction) {
@@ -602,6 +646,7 @@ async function updateGradientDirection(direction) {
   }
 
   setStatus("Direcao do gradiente atualizada.");
+  saveState();
 }
 
 async function updateWatermarkPosition(position) {
@@ -628,6 +673,7 @@ async function updateWatermarkPosition(position) {
   }
 
   setStatus("Posicao da marca d'agua atualizada.");
+  saveState();
 }
 
 function updateWaMessageCounter() {
@@ -635,6 +681,12 @@ function updateWaMessageCounter() {
   waMessageCounter.textContent = `${currentLength}/${MAX_WA_MESSAGE_LENGTH}`;
 
   if (currentLength > MAX_WA_MESSAGE_LENGTH) {
+    if (!waMessageCounter.classList.contains("exceeded")) {
+      waMessageCounter.classList.add("shake");
+      waMessageCounter.addEventListener("animationend", () => {
+        waMessageCounter.classList.remove("shake");
+      }, { once: true });
+    }
     waMessageCounter.classList.add("exceeded");
     if (getSelectedMode() === "whatsapp") generateButton.disabled = true;
   } else {
@@ -660,6 +712,7 @@ function clearAllFields() {
   lastGeneratedPayload = "";
   downloadButton.disabled = true;
   generateButton.disabled = false;
+  localStorage.removeItem("linkos_state");
 
   setStatus("Campos limpos. Escolha um tipo e digite o conteúdo.");
 }
@@ -781,6 +834,7 @@ window.addEventListener("resize", () => {
 modeInputs.forEach((input) => {
   input.addEventListener("change", () => {
     updateModeFields(input.value);
+    saveState();
     setStatus("Modo atualizado. Gere um novo QR code para aplicar a mudanca.");
   });
 });
@@ -790,3 +844,4 @@ syncActiveDirection();
 syncActivePosition();
 syncActiveOptionTab("directionPanel");
 updateModeFields(getSelectedMode());
+loadState();
