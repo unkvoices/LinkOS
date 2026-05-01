@@ -32,7 +32,7 @@ const DEFAULT_PRESET = "frost";
 const DEFAULT_DIRECTION = "diagonal";
 const DEFAULT_WATERMARK_POSITION = "bottom-right";
 const MAX_WA_MESSAGE_LENGTH = 250; // Limite de caracteres para a mensagem do WhatsApp
-const WATERMARK_PATH = "assets/linkos-watermark.png";
+const WATERMARK_PATH = "assets/linkOS_LOGO.svg";
 const MAX_HISTORY = 5;
 
 const QR_PRESETS = {
@@ -527,14 +527,14 @@ async function addWatermarkToCanvas(sourceCanvas, size) {
   context.drawImage(sourceCanvas, 0, 0, size, size);
 
   drawCircle(context, badgeCenterX, badgeCenterY, badgeRadius + Math.round(size * 0.01));
-  context.fillStyle = "rgba(225, 226, 227, 0.96)";
+  context.fillStyle = "rgba(225, 226, 227, 0.76)";
   context.fill();
 
   drawCircle(context, badgeCenterX, badgeCenterY, badgeRadius);
-  context.fillStyle = QR_LIGHT_COLOR;
+  context.fillStyle = "none";
   context.fill();
   context.lineWidth = Math.max(2, Math.round(size * 0.004));
-  context.strokeStyle = "rgba(12, 184, 207, 0.92)";
+  context.strokeStyle = "rgba(12, 184, 207, 0)";
   context.stroke();
 
   if (!logo) {

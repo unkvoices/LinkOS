@@ -1,6 +1,6 @@
 :root {
   --color1: #010419;
-  --color2: #16192d;
+  --color2: #121429;
   --color3: #2b2e42;
   --color4: #3f4256;
   --color5: #54576a;
@@ -38,8 +38,9 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   background:
     radial-gradient(circle at top, rgba(12, 184, 207, 0.16), transparent 34%),
     linear-gradient(180deg, #070b23 0%, #010419 100%);
@@ -57,13 +58,20 @@ header {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  background: var(--c3);
+  background: var(--color2);
+  border: none;
+  backdrop-filter: blur(10px);
+  box-shadow: 0px 0px 0px 2px var(--color5);
+  /* border-bottom: 3px solid var(--color5); */
+  z-index: 1;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
 .logo {
-  cursor: default;
+  width: max-content;
+  margin-right: auto;
+  cursor: pointer;
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
@@ -71,6 +79,18 @@ header {
   font-weight: 800;
   color: var(--color6);
   letter-spacing: 0.04em;
+
+  img {
+    filter: brightness(120%) sepia(20%) hue-rotate(190deg) saturate(150%);
+    width: 50px;
+
+    &:hover {
+      filter: brightness(140%) sepia(30%) hue-rotate(190deg) saturate(180%);
+    }
+    &:active {
+      filter: brightness(110%) sepia(20%) hue-rotate(190deg) saturate(150%);
+    }
+  }
 }
 
 .container {
