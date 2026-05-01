@@ -7,6 +7,8 @@ const wifiSsidInput = document.querySelector("#wifiSsid");
 const wifiPasswordInput = document.querySelector("#wifiPassword");
 const wifiSecuritySelect = document.querySelector("#wifiSecurity");
 const wifiHiddenInput = document.querySelector("#wifiHidden");
+const whatsappFields = document.querySelector("#whatsappFields");
+const waMessageInput = document.querySelector("#waMessage");
 const statusMessage = document.querySelector("#statusMessage");
 const modeInputs = document.querySelectorAll('input[name="qrType"]');
 const colorPalette = document.querySelector(".colorPalette");
@@ -35,6 +37,11 @@ const QR_PRESETS = {
   aqua: {
     type: "linear",
     colors: ["#d9f8ff", "#0cb8cf", "#0a6170"],
+    angle: 135
+  },
+  whatsapp: {
+    type: "linear",
+    colors: ["#25D366", "#128C7E", "#075E54"],
     angle: 135
   },
   forest: {
@@ -179,9 +186,15 @@ function getQrPayload() {
     return null;
   }
 
-  if (mode === "vcard") {
-    setStatus("O modo vCard ainda nao foi implementado nesta versao.", true);
-    return null;
+  if (mode === "whatsapp") {
+    const digits = value.replace(/\D/g, "");
+    if (!digits || digits.length < 10) {
+      setStatus("Digite um numero de WhatsApp valido (com DDD e sem simbolos).", true);
+      return null;
+    }
+    const message = waMessageInput.value.trim();
+    const messageParam = message ? `?text=${encodeURIComponent(message)}` : "";
+    return `https://wa.me/${digits}${messageParam}`;
   }
 
   if (mode === "url") {
@@ -622,16 +635,18 @@ function scrollToOption(targetId) {
 
 function updateModeFields(mode) {
   const isWifiMode = mode === "wifi";
+  const isWhatsappMode = mode === "whatsapp";
 
   wifiFields.classList.toggle("is-hidden", !isWifiMode);
+  whatsappFields.classList.toggle("is-hidden", !isWhatsappMode);
   textInput.disabled = isWifiMode;
 
   if (mode === "url") {
     textInput.placeholder = "https://exemplo.com";
   } else if (mode === "text") {
     textInput.placeholder = "Escreva um texto";
-  } else if (mode === "vcard") {
-    textInput.placeholder = "Modo vCard em breve";
+  } else if (mode === "whatsapp") {
+    textInput.placeholder = "Ex.: 5511999999999";
   } else if (isWifiMode) {
     textInput.placeholder = "Use os campos de Wi-Fi abaixo";
   } else {

@@ -190,7 +190,8 @@ header {
 }
 
 .fieldBlock input,
-.fieldBlock select {
+.fieldBlock select,
+.fieldBlock textarea {
   min-height: 48px;
   padding: 12px 14px;
   border-radius: 14px;
@@ -202,12 +203,20 @@ header {
   transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
 }
 
-.fieldBlock input::placeholder {
+.fieldBlock textarea {
+  min-height: 80px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.fieldBlock input::placeholder,
+.fieldBlock textarea::placeholder {
   color: rgba(225, 226, 227, 0.56);
 }
 
 .fieldBlock input:focus,
-.fieldBlock select:focus {
+.fieldBlock select:focus,
+.fieldBlock textarea:focus {
   border-color: var(--c1);
   background: rgba(1, 4, 25, 0.72);
   box-shadow: 0 0 0 4px rgba(12, 184, 207, 0.14);
@@ -371,6 +380,10 @@ header {
 
 .colorSwatch[data-preset="frost"] {
   background: linear-gradient(135deg, #f4f7fb 0%, #cfd9df 48%, #8fa5b3 100%);
+}
+
+.colorSwatch[data-preset="whatsapp"] {
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 45%, #075E54 100%);
 }
 
 .colorSwatch[data-preset="aqua"] {
@@ -621,7 +634,7 @@ header {
   aspect-ratio: square;
   border: none;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
- background: none;
+  background: none;
   /* background:
     linear-gradient(180deg, rgba(207, 209, 209, 0.88), rgba(122, 166, 172, 0.98), rgba(209, 217, 219, 0.98)); */
   border-radius: 20px;

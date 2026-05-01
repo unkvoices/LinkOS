@@ -1,127 +1,292 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>linkOS QR Generator</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="screen.css">
-</head>
-<body>
-  <header>
-    <h1 class="logo">linkOS</h1>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>linkOS QR Generator</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="screen.css" />
+  </head>
+  <body>
+    <header>
+      <h1 class="logo">linkOS</h1>
+    </header>
 
-  <section class="container">
-    <div class="introBlock">
-      <p class="eyebrow">QR code generator</p>
-      <h2 class="pageTitle">Crie, visualize e baixe seu QR code</h2>
-      <p class="pageSubtitle">Interface enxuta para gerar codigos rapidos no celular, tablet ou desktop.</p>
-    </div> 
-
-    <div class="panel inputPanel">
-      <div class="containerElement">
-        <input type="text" id="text" placeholder="Escreva um texto ou cole uma URL">
-        <button id="gr_Gen">Gerar QR Code</button>
+    <section class="container">
+      <div class="introBlock">
+        <p class="eyebrow">QR code generator</p>
+        <h2 class="pageTitle">Crie, visualize e baixe seu QR code</h2>
+        <p class="pageSubtitle">
+          Interface enxuta para gerar codigos rapidos no celular, tablet ou
+          desktop.
+        </p>
       </div>
-      <div class="modeFields is-hidden" id="wifiFields">
-        <div class="fieldGrid">
-          <label class="fieldBlock" for="wifiSsid">
-            <span>Nome da rede</span>
-            <input type="text" id="wifiSsid" placeholder="Ex.: Minha Rede Wi-Fi">
-          </label>
-          <label class="fieldBlock" for="wifiPassword">
-            <span>Senha</span>
-            <input type="text" id="wifiPassword" placeholder="Digite a senha">
-          </label>
-          <label class="fieldBlock" for="wifiSecurity">
-            <span>Seguranca</span>
-            <select id="wifiSecurity">
-              <option value="WPA" selected>WPA/WPA2</option>
-              <option value="WEP">WEP</option>
-              <option value="nopass">Sem senha</option>
-            </select>
-          </label>
-          <label class="fieldCheck" for="wifiHidden">
-            <input type="checkbox" id="wifiHidden">
-            <span>Rede oculta</span>
-          </label>
+
+      <div class="panel inputPanel">
+        <div class="containerElement">
+          <input
+            type="text"
+            id="text"
+            placeholder="Escreva um texto ou cole uma URL"
+          />
+          <button id="gr_Gen">Gerar QR Code</button>
+        </div>
+        <div class="modeFields is-hidden" id="wifiFields">
+          <div class="fieldGrid">
+            <label class="fieldBlock" for="wifiSsid">
+              <span>Nome da rede</span>
+              <input
+                type="text"
+                id="wifiSsid"
+                placeholder="Ex.: Minha Rede Wi-Fi"
+              />
+            </label>
+            <label class="fieldBlock" for="wifiPassword">
+              <span>Senha</span>
+              <input
+                type="text"
+                id="wifiPassword"
+                placeholder="Digite a senha"
+              />
+            </label>
+            <label class="fieldBlock" for="wifiSecurity">
+              <span>Seguranca</span>
+              <select id="wifiSecurity">
+                <option value="WPA" selected>WPA/WPA2</option>
+                <option value="WEP">WEP</option>
+                <option value="nopass">Sem senha</option>
+              </select>
+            </label>
+            <label class="fieldCheck" for="wifiHidden">
+              <input type="checkbox" id="wifiHidden" />
+              <span>Rede oculta</span>
+            </label>
+          </div>
+        </div>
+        <div class="modeFields is-hidden" id="whatsappFields">
+          <div class="fieldGrid">
+            <label class="fieldBlock" for="waMessage">
+              <span>Mensagem (opcional)</span>
+              <textarea
+                id="waMessage"
+                placeholder="Digite a mensagem automatica que a pessoa enviara"
+              ></textarea>
+            </label>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="panel qr_mode">
-      <h4>Selecione o tipo do QR code</h4>
-      <form action="#" id="modeElement">
-        <label for="texto">
-          <input type="radio" name="qrType" id="texto" value="text" checked>
-          <span>Texto</span>
-        </label>
-        <label for="linkUrl">
-          <input type="radio" name="qrType" id="linkUrl" value="url">
-          <span>URL</span>
-        </label>
-        <label for="vCard">
-          <input type="radio" name="qrType" id="vCard" value="vcard">
-          <span>vCard</span>
-        </label>
-        <label for="wifi">
-          <input type="radio" name="qrType" id="wifi" value="wifi">
-          <span>Wi-fi</span>
-        </label>
-      </form>
-    </div>
+      <div class="panel qr_mode">
+        <h4>Selecione o tipo do QR code</h4>
+        <form action="#" id="modeElement">
+          <label for="texto">
+            <input type="radio" name="qrType" id="texto" value="text" checked />
+            <span>Texto</span>
+          </label>
+          <label for="linkUrl">
+            <input type="radio" name="qrType" id="linkUrl" value="url" />
+            <span>URL</span>
+          </label>
+          <label for="whatsapp">
+            <input type="radio" name="qrType" id="whatsapp" value="whatsapp" />
+            <span>WhatsApp</span>
+          </label>
+          <label for="wifi">
+            <input type="radio" name="qrType" id="wifi" value="wifi" />
+            <span>Wi-fi</span>
+          </label>
+        </form>
+      </div>
 
-    <div class="panel previewPanel">
-      <p id="statusMessage" aria-live="polite">Escolha um tipo, digite o conteudo e gere o QR code.</p>
-      <div id="qrcode" aria-label="Previa do QR code"></div>
-      <div class="colorPalette" role="group" aria-label="Paleta de cores do QR code">
-        <span class="paletteLabel">Personalizar cor</span>
-        <div class="paletteOptions">
-          <button class="colorSwatch is-active" type="button" data-preset="frost" aria-label="Frost"></button>
-          <button class="colorSwatch" type="button" data-preset="aqua" aria-label="Aqua"></button>
-          <button class="colorSwatch" type="button" data-preset="forest" aria-label="Forest"></button>
-          <button class="colorSwatch" type="button" data-preset="sunset" aria-label="Sunset"></button>
-          <button class="colorSwatch" type="button" data-preset="ember" aria-label="Ember"></button>
-          <button class="colorSwatch" type="button" data-preset="copper" aria-label="Copper"></button>
-          <button class="colorSwatch is-hidden" type="button" data-preset="violet" aria-label="Violet"></button>
-          <button class="colorSwatch is-hidden" type="button" data-preset="berry" aria-label="Berry"></button>
-          <button class="colorSwatch is-hidden" type="button" data-preset="lagoon" aria-label="Lagoon"></button>
-          <button class="colorSwatch is-hidden" type="button" data-preset="lime" aria-label="Lime"></button>
-          <button class="colorSwatch is-hidden" type="button" data-preset="gold" aria-label="Gold"></button>
-          <button class="colorSwatch is-hidden" type="button" data-preset="mono" aria-label="Mono"></button>
-          <button class="moreColorsBtn" type="button" aria-expanded="false" aria-label="Mostrar mais cores">+</button>
+      <div class="panel previewPanel">
+        <p id="statusMessage" aria-live="polite">
+          Escolha um tipo, digite o conteudo e gere o QR code.
+        </p>
+        <div id="qrcode" aria-label="Previa do QR code"></div>
+        <div
+          class="colorPalette"
+          role="group"
+          aria-label="Paleta de cores do QR code"
+        >
+          <span class="paletteLabel">Personalizar cor</span>
+          <div class="paletteOptions">
+            <button
+              class="colorSwatch is-active"
+              type="button"
+              data-preset="frost"
+              aria-label="Frost"
+            ></button>
+            <button
+              class="colorSwatch"
+              type="button"
+              data-preset="aqua"
+              aria-label="Aqua"
+            ></button>
+            <button
+              class="colorSwatch"
+              type="button"
+              data-preset="forest"
+              aria-label="Forest"
+            ></button>
+            <button
+              class="colorSwatch"
+              type="button"
+              data-preset="sunset"
+              aria-label="Sunset"
+            ></button>
+            <button
+              class="colorSwatch"
+              type="button"
+              data-preset="ember"
+              aria-label="Ember"
+            ></button>
+            <button
+              class="colorSwatch"
+              type="button"
+              data-preset="copper"
+              aria-label="Copper"
+            ></button>
+            <button
+              class="colorSwatch is-hidden"
+              type="button"
+              data-preset="violet"
+              aria-label="Violet"
+            ></button>
+            <button
+              class="colorSwatch is-hidden"
+              type="button"
+              data-preset="berry"
+              aria-label="Berry"
+            ></button>
+            <button
+              class="colorSwatch is-hidden"
+              type="button"
+              data-preset="lagoon"
+              aria-label="Lagoon"
+            ></button>
+            <button
+              class="colorSwatch is-hidden"
+              type="button"
+              data-preset="lime"
+              aria-label="Lime"
+            ></button>
+            <button
+              class="colorSwatch is-hidden"
+              type="button"
+              data-preset="gold"
+              aria-label="Gold"
+            ></button>
+            <button
+              class="colorSwatch is-hidden"
+              type="button"
+              data-preset="mono"
+              aria-label="Mono"
+            ></button>
+            <button
+              class="moreColorsBtn"
+              type="button"
+              aria-expanded="false"
+              aria-label="Mostrar mais cores"
+            >
+              +
+            </button>
+          </div>
         </div>
+        <div
+          class="optionTabs"
+          role="tablist"
+          aria-label="Opcoes de personalizacao"
+        >
+          <span class="optionTabIndicator" aria-hidden="true"></span>
+          <button
+            class="optionTab is-active"
+            type="button"
+            data-target="directionPanel"
+            aria-selected="true"
+          >
+            Direcao
+          </button>
+          <button
+            class="optionTab"
+            type="button"
+            data-target="watermarkPanel"
+            aria-selected="false"
+          >
+            Marca d'agua
+          </button>
+        </div>
+        <div class="optionCarousel" aria-label="Carrossel de opcoes">
+          <section
+            class="gradientDirection optionCard"
+            id="directionPanel"
+            role="group"
+            aria-label="Direcao do gradiente"
+          >
+            <span class="directionLabel">Direcao</span>
+            <div class="directionOptions">
+              <button
+                class="directionBtn is-active"
+                type="button"
+                data-direction="diagonal"
+              >
+                Diagonal
+              </button>
+              <button
+                class="directionBtn"
+                type="button"
+                data-direction="vertical"
+              >
+                Vertical
+              </button>
+              <button
+                class="directionBtn"
+                type="button"
+                data-direction="radial"
+              >
+                Radial
+              </button>
+            </div>
+          </section>
+          <section
+            class="watermarkPosition optionCard"
+            id="watermarkPanel"
+            role="group"
+            aria-label="Posicao da marca d'agua"
+          >
+            <span class="positionLabel">Marca d'agua</span>
+            <div class="positionOptions">
+              <button class="positionBtn" type="button" data-position="center">
+                Centro
+              </button>
+              <button
+                class="positionBtn is-active"
+                type="button"
+                data-position="bottom-right"
+              >
+                Inf. direita
+              </button>
+              <button
+                class="positionBtn"
+                type="button"
+                data-position="bottom-left"
+              >
+                Inf. esquerda
+              </button>
+              <button
+                class="positionBtn"
+                type="button"
+                data-position="top-right"
+              >
+                Sup. direita
+              </button>
+            </div>
+          </section>
+        </div>
+        <button class="downloadBtn" type="button" disabled>Download PNG</button>
       </div>
-      <div class="optionTabs" role="tablist" aria-label="Opcoes de personalizacao">
-        <span class="optionTabIndicator" aria-hidden="true"></span>
-        <button class="optionTab is-active" type="button" data-target="directionPanel" aria-selected="true">Direcao</button>
-        <button class="optionTab" type="button" data-target="watermarkPanel" aria-selected="false">Marca d'agua</button>
-      </div>
-      <div class="optionCarousel" aria-label="Carrossel de opcoes">
-        <section class="gradientDirection optionCard" id="directionPanel" role="group" aria-label="Direcao do gradiente">
-          <span class="directionLabel">Direcao</span>
-          <div class="directionOptions">
-            <button class="directionBtn is-active" type="button" data-direction="diagonal">Diagonal</button>
-            <button class="directionBtn" type="button" data-direction="vertical">Vertical</button>
-            <button class="directionBtn" type="button" data-direction="radial">Radial</button>
-          </div>
-        </section>
-        <section class="watermarkPosition optionCard" id="watermarkPanel" role="group" aria-label="Posicao da marca d'agua">
-          <span class="positionLabel">Marca d'agua</span>
-          <div class="positionOptions">
-            <button class="positionBtn" type="button" data-position="center">Centro</button>
-            <button class="positionBtn is-active" type="button" data-position="bottom-right">Inf. direita</button>
-            <button class="positionBtn" type="button" data-position="bottom-left">Inf. esquerda</button>
-            <button class="positionBtn" type="button" data-position="top-right">Sup. direita</button>
-          </div>
-        </section>
-      </div>
-      <button class="downloadBtn" type="button" disabled>Download PNG</button>
-    </div>
-  </section>
+    </section>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="script.js" defer></script>
-</body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="script.js" defer></script>
+  </body>
 </html>
