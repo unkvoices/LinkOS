@@ -5,12 +5,25 @@
   --color4: #3f4256;
   --color5: #54576a;
   --color6: #e1e2e3;
-  --font:
+  --color7: #f23131;
+  --color8: #960000;
+  --color9: #3a0202;
+  --font: poppins;
 }
 
+*,
+*::after,
+*::before {
+  font-family: var(--font);
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+html {}
 
 body {
-  font-family: Arial, sans-serif;
   background: var(--color1);
   color: var(--color6);
   text-align: center;
@@ -23,10 +36,34 @@ body {
 input {
   padding: 10px;
   width: 250px;
+  outline: none;
+  border-radius: 6px;
+  border: solid 2px var(--color4);
+  background: none;
+  box-shadow: 5px 5px 40px 1px var(--color5) inset;
+  color: var(--color6);
+
+  &::placeholder {
+    color: var(--color6);
+  }
 }
 
 button {
-  padding: 10px 20px;
+  padding: 12.5px 15px;
   margin-left: 10px;
   cursor: pointer;
+  border-radius: 6px;
+  border: none;
+  background: none;
+  box-shadow: 5px 5px 40px 1px var(--color7) inset;
+  color: var(--color6);
+
+  &:hover {
+    box-shadow: 5px 5px 40px 1px var(--color8) inset;
+  }
+
+  &:active {
+    box-shadow: 5px 5px 40px 1px var(--color9) inset;
+  }
+
 }
