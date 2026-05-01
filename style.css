@@ -48,6 +48,12 @@ header {
   align-items: flex-start;
   justify-content: flex-start;
   background: var(--color9);
+
+  & .logo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--color6);
+  }
 }
 
 .container {
@@ -58,8 +64,7 @@ header {
   width: 96%;
   height: auto;
   padding: 20px;
-  border: solid #fff;
-
+  border: 1px solid #fff;
 }
 
 .containerElement {
@@ -68,39 +73,39 @@ header {
   align-items: center;
   justify-content: center;
   gap: 20px;
-}
 
-input {
-  padding: 10px;
-  width: 250px;
-  outline: none;
-  border-radius: 6px;
-  border: solid 2px var(--color4);
-  background: none;
-  box-shadow: 5px 5px 40px 1px var(--color5) inset;
-  color: var(--color6);
-
-  &::placeholder {
+  input {
+    padding: 10px;
+    width: 250px;
+    outline: none;
+    border-radius: 6px;
+    border: solid 2px var(--color4);
+    background: none;
+    box-shadow: 5px 5px 40px 1px var(--color5) inset;
     color: var(--color6);
-  }
-}
 
-button {
-  padding: 12.5px 15px;
-  margin-left: 10px;
-  cursor: pointer;
-  border-radius: 6px;
-  border: none;
-  background: none;
-  box-shadow: 5px 5px 40px 1px var(--color7) inset;
-  color: var(--color6);
-
-  &:hover {
-    box-shadow: 5px 5px 40px 1px var(--color8) inset;
+    &::placeholder {
+      color: var(--color6);
+    }
   }
 
-  &:active {
-    box-shadow: 5px 5px 40px 1px var(--color9) inset;
-  }
+  button {
+    padding: 12.5px 15px;
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 6px;
+    border: none;
+    background: none;
+    box-shadow: 5px 5px 40px 1px var(--color7) inset;
+    color: var(--color6);
 
+    &:hover {
+      box-shadow: 5px 5px 40px 1px var(--color8) inset;
+    }
+
+    &:active {
+      box-shadow: 5px 5px 40px 1px var(--color9) inset;
+    }
+
+  }
 }
