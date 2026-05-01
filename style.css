@@ -374,8 +374,77 @@ header {
   background: linear-gradient(180deg, rgba(12, 184, 207, 0.3), rgba(8, 127, 143, 0.18));
 }
 
-.gradientDirection {
+.optionTabs {
   width: min(100%, 360px);
+  position: relative;
+  display: flex;
+  gap: 10px;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid rgba(12, 184, 207, 0.2);
+  background: rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+}
+
+.optionTabIndicator {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(50% - 7px);
+  height: calc(100% - 8px);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(12, 184, 207, 0.22), rgba(8, 127, 143, 0.16));
+  box-shadow:
+    0 0 0 1px rgba(12, 184, 207, 0.18) inset,
+    0 10px 24px rgba(8, 127, 143, 0.16);
+  transition: transform 220ms ease, width 220ms ease;
+  pointer-events: none;
+}
+
+.optionTab {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+  min-height: 42px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: var(--color6);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 160ms ease, color 160ms ease;
+}
+
+.optionTab:hover {
+  transform: translateY(-1px);
+}
+
+.optionTab.is-active {
+  color: #f4fbff;
+}
+
+.optionCarousel {
+  width: min(100%, 360px);
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 100%;
+  gap: 14px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.optionCarousel::-webkit-scrollbar {
+  display: none;
+}
+
+.optionCard {
+  scroll-snap-align: start;
+}
+
+.gradientDirection {
+  width: 100%;
   padding: 10px 16px;
   display: flex;
   flex-direction: column;
@@ -415,6 +484,53 @@ header {
 }
 
 .directionBtn.is-active {
+  border-color: rgba(12, 184, 207, 0.72);
+  background: linear-gradient(180deg, rgba(12, 184, 207, 0.18), rgba(8, 127, 143, 0.14));
+  box-shadow: 0 0 0 1px rgba(12, 184, 207, 0.18) inset;
+}
+
+.watermarkPosition {
+  width: 100%;
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-radius: 22px;
+  border: 1px solid rgba(12, 184, 207, 0.28);
+  background: linear-gradient(180deg, rgba(12, 184, 207, 0.06), rgba(8, 127, 143, 0.05));
+  color: var(--color6);
+  font-weight: 600;
+}
+
+.positionLabel {
+  font-size: 0.95rem;
+}
+
+.positionOptions {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.positionBtn {
+  flex: 1 1 calc(50% - 5px);
+  min-height: 40px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color6);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.positionBtn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(12, 184, 207, 0.35);
+}
+
+.positionBtn.is-active {
   border-color: rgba(12, 184, 207, 0.72);
   background: linear-gradient(180deg, rgba(12, 184, 207, 0.18), rgba(8, 127, 143, 0.14));
   box-shadow: 0 0 0 1px rgba(12, 184, 207, 0.18) inset;

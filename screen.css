@@ -52,7 +52,10 @@
   .containerElement button,
   .downloadBtn,
   .colorPalette,
-  .gradientDirection {
+  .gradientDirection,
+  .watermarkPosition,
+  .optionTabs,
+  .optionCarousel {
     width: 100%;
   }
 
@@ -133,11 +136,16 @@
   }
 
   .colorPalette,
-  .gradientDirection {
+  .gradientDirection,
+  .watermarkPosition {
     padding-inline: 14px;
   }
 
   .directionOptions {
+    flex-direction: column;
+  }
+
+  .positionOptions {
     flex-direction: column;
   }
 }

@@ -7,13 +7,18 @@ const modeInputs = document.querySelectorAll('input[name="qrType"]');
 const colorPalette = document.querySelector(".colorPalette");
 const colorSwatches = document.querySelectorAll(".colorSwatch");
 const moreColorsButton = document.querySelector(".moreColorsBtn");
+const optionTabs = document.querySelectorAll(".optionTab");
+const optionTabIndicator = document.querySelector(".optionTabIndicator");
+const optionCarousel = document.querySelector(".optionCarousel");
 const directionButtons = document.querySelectorAll(".directionBtn");
+const positionButtons = document.querySelectorAll(".positionBtn");
 
 const QR_EXPORT_SIZE = 1000;
 const QR_PREVIEW_SIZE = 240;
 const QR_LIGHT_COLOR = "#04373d";
 const DEFAULT_PRESET = "frost";
 const DEFAULT_DIRECTION = "diagonal";
+const DEFAULT_WATERMARK_POSITION = "bottom-right";
 const WATERMARK_PATH = "assets/linkos-watermark.png";
 
 const QR_PRESETS = {
@@ -90,6 +95,7 @@ watermarkImage.src = WATERMARK_PATH;
 let lastGeneratedPayload = "";
 let selectedPreset = DEFAULT_PRESET;
 let selectedDirection = DEFAULT_DIRECTION;
+let selectedWatermarkPosition = DEFAULT_WATERMARK_POSITION;
 
 function getSelectedMode() {
   return document.querySelector('input[name="qrType"]:checked')?.value || "";
@@ -170,6 +176,43 @@ function syncActiveDirection() {
     button.classList.toggle("is-active", isActive);
     button.setAttribute("aria-pressed", String(isActive));
   });
+}
+
+function syncActivePosition() {
+  positionButtons.forEach((button) => {
+    const isActive = button.dataset.position === selectedWatermarkPosition;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+}
+
+function syncActiveOptionTab(targetId) {
+  let activeTab = null;
+
+  optionTabs.forEach((tab) => {
+    const isActive = tab.dataset.target === targetId;
+    tab.classList.toggle("is-active", isActive);
+    tab.setAttribute("aria-selected", String(isActive));
+
+    if (isActive) {
+      activeTab = tab;
+    }
+  });
+
+  updateOptionIndicator(activeTab);
+}
+
+function updateOptionIndicator(activeTab) {
+  if (!optionTabIndicator || !activeTab) {
+    return;
+  }
+
+  const tabsRect = activeTab.parentElement.getBoundingClientRect();
+  const tabRect = activeTab.getBoundingClientRect();
+  const left = tabRect.left - tabsRect.left;
+
+  optionTabIndicator.style.width = `${tabRect.width}px`;
+  optionTabIndicator.style.transform = `translateX(${left}px)`;
 }
 
 function toggleExtraColors() {
@@ -266,14 +309,42 @@ function paintQrModules(sourceCanvas, size) {
   return outputCanvas;
 }
 
+function getWatermarkCoordinates(size, badgeSize, badgeMargin) {
+  if (selectedWatermarkPosition === "center") {
+    return {
+      x: Math.round((size - badgeSize) / 2),
+      y: Math.round((size - badgeSize) / 2)
+    };
+  }
+
+  if (selectedWatermarkPosition === "bottom-left") {
+    return {
+      x: badgeMargin,
+      y: size - badgeSize - badgeMargin
+    };
+  }
+
+  if (selectedWatermarkPosition === "top-right") {
+    return {
+      x: size - badgeSize - badgeMargin,
+      y: badgeMargin
+    };
+  }
+
+  return {
+    x: size - badgeSize - badgeMargin,
+    y: size - badgeSize - badgeMargin
+  };
+}
+
 async function addWatermarkToCanvas(sourceCanvas, size) {
   const outputCanvas = document.createElement("canvas");
   const context = outputCanvas.getContext("2d");
   const logo = await watermarkReady;
-  const badgeSize = Math.round(size * 0.2);
+  const badgeSize = Math.round(size * 0.16);
   const badgeRadius = badgeSize / 2;
-  const badgeX = Math.round((size - badgeSize) / 2);
-  const badgeY = Math.round((size - badgeSize) / 2);
+  const badgeMargin = Math.round(size * 0.08);
+  const { x: badgeX, y: badgeY } = getWatermarkCoordinates(size, badgeSize, badgeMargin);
   const badgeCenterX = badgeX + badgeRadius;
   const badgeCenterY = badgeY + badgeRadius;
 
@@ -472,6 +543,47 @@ async function updateGradientDirection(direction) {
   setStatus("Direcao do gradiente atualizada.");
 }
 
+async function updateWatermarkPosition(position) {
+  selectedWatermarkPosition = [
+    "center",
+    "bottom-right",
+    "bottom-left",
+    "top-right"
+  ].includes(position)
+    ? position
+    : DEFAULT_WATERMARK_POSITION;
+  syncActivePosition();
+
+  if (!lastGeneratedPayload) {
+    setStatus("Posicao da marca d'agua atualizada.", false);
+    return;
+  }
+
+  const rendered = await renderQrCode(lastGeneratedPayload);
+
+  if (!rendered) {
+    setStatus("Nao foi possivel aplicar a nova posicao.", true);
+    return;
+  }
+
+  setStatus("Posicao da marca d'agua atualizada.");
+}
+
+function scrollToOption(targetId) {
+  const target = document.getElementById(targetId);
+
+  if (!target) {
+    return;
+  }
+
+  target.scrollIntoView({
+    behavior: "smooth",
+    block: "nearest",
+    inline: "start"
+  });
+  syncActiveOptionTab(targetId);
+}
+
 generateButton.addEventListener("click", () => {
   void generateQrCode();
 });
@@ -495,10 +607,48 @@ colorSwatches.forEach((swatch) => {
   });
 });
 
+optionTabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
+    scrollToOption(tab.dataset.target);
+  });
+});
+
 directionButtons.forEach((button) => {
   button.addEventListener("click", () => {
     void updateGradientDirection(button.dataset.direction);
   });
+});
+
+positionButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    void updateWatermarkPosition(button.dataset.position);
+  });
+});
+
+optionCarousel.addEventListener("scroll", () => {
+  const panels = Array.from(optionCarousel.querySelectorAll(".optionCard"));
+  const carouselLeft = optionCarousel.getBoundingClientRect().left;
+
+  let nearestPanel = panels[0];
+  let nearestDistance = Number.POSITIVE_INFINITY;
+
+  panels.forEach((panel) => {
+    const distance = Math.abs(panel.getBoundingClientRect().left - carouselLeft);
+
+    if (distance < nearestDistance) {
+      nearestDistance = distance;
+      nearestPanel = panel;
+    }
+  });
+
+  if (nearestPanel?.id) {
+    syncActiveOptionTab(nearestPanel.id);
+  }
+});
+
+window.addEventListener("resize", () => {
+  const activeTab = document.querySelector(".optionTab.is-active");
+  updateOptionIndicator(activeTab);
 });
 
 modeInputs.forEach((input) => {
@@ -515,3 +665,5 @@ modeInputs.forEach((input) => {
 
 syncActiveSwatch();
 syncActiveDirection();
+syncActivePosition();
+syncActiveOptionTab("directionPanel");
