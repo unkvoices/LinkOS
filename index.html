@@ -17,12 +17,36 @@
       <p class="eyebrow">QR code generator</p>
       <h2 class="pageTitle">Crie, visualize e baixe seu QR code</h2>
       <p class="pageSubtitle">Interface enxuta para gerar codigos rapidos no celular, tablet ou desktop.</p>
-    </div>
+    </div> 
 
     <div class="panel inputPanel">
       <div class="containerElement">
         <input type="text" id="text" placeholder="Escreva um texto ou cole uma URL">
         <button id="gr_Gen">Gerar QR Code</button>
+      </div>
+      <div class="modeFields is-hidden" id="wifiFields">
+        <div class="fieldGrid">
+          <label class="fieldBlock" for="wifiSsid">
+            <span>Nome da rede</span>
+            <input type="text" id="wifiSsid" placeholder="Ex.: Minha Rede Wi-Fi">
+          </label>
+          <label class="fieldBlock" for="wifiPassword">
+            <span>Senha</span>
+            <input type="text" id="wifiPassword" placeholder="Digite a senha">
+          </label>
+          <label class="fieldBlock" for="wifiSecurity">
+            <span>Seguranca</span>
+            <select id="wifiSecurity">
+              <option value="WPA" selected>WPA/WPA2</option>
+              <option value="WEP">WEP</option>
+              <option value="nopass">Sem senha</option>
+            </select>
+          </label>
+          <label class="fieldCheck" for="wifiHidden">
+            <input type="checkbox" id="wifiHidden">
+            <span>Rede oculta</span>
+          </label>
+        </div>
       </div>
     </div>
 

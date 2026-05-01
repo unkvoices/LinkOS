@@ -140,6 +140,32 @@ header {
   gap: 10px;
 }
 
+.modeFields {
+  margin-top: 16px;
+}
+
+.modeFields.is-hidden {
+  display: none;
+}
+
+.fieldGrid {
+  display: grid;
+  gap: 12px;
+}
+
+.fieldBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--color6);
+  font-weight: 600;
+}
+
+.fieldBlock span,
+.fieldCheck span {
+  font-size: 0.92rem;
+}
+
 .containerElement input {
   min-height: 52px;
   padding: 12px 14px;
@@ -161,6 +187,46 @@ header {
   border-color: var(--c1);
   background: rgba(1, 4, 25, 0.72);
   box-shadow: 0 0 0 4px rgba(12, 184, 207, 0.14);
+}
+
+.fieldBlock input,
+.fieldBlock select {
+  min-height: 48px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: solid 2px var(--color4);
+  background: rgba(1, 4, 25, 0.45);
+  color: var(--color6);
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.fieldBlock input::placeholder {
+  color: rgba(225, 226, 227, 0.56);
+}
+
+.fieldBlock input:focus,
+.fieldBlock select:focus {
+  border-color: var(--c1);
+  background: rgba(1, 4, 25, 0.72);
+  box-shadow: 0 0 0 4px rgba(12, 184, 207, 0.14);
+}
+
+.fieldCheck {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 4px;
+  color: var(--color6);
+  font-weight: 600;
+}
+
+.fieldCheck input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--c1);
 }
 
 .containerElement button {

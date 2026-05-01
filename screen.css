@@ -111,6 +111,11 @@
     border-radius: 12px;
   }
 
+  .fieldBlock input,
+  .fieldBlock select {
+    border-radius: 12px;
+  }
+
   #modeElement {
     flex-direction: column;
   }

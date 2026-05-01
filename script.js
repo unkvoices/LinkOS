@@ -2,6 +2,11 @@ const qrContainer = document.querySelector("#qrcode");
 const generateButton = document.querySelector("#gr_Gen");
 const downloadButton = document.querySelector(".downloadBtn");
 const textInput = document.querySelector("#text");
+const wifiFields = document.querySelector("#wifiFields");
+const wifiSsidInput = document.querySelector("#wifiSsid");
+const wifiPasswordInput = document.querySelector("#wifiPassword");
+const wifiSecuritySelect = document.querySelector("#wifiSecurity");
+const wifiHiddenInput = document.querySelector("#wifiHidden");
 const statusMessage = document.querySelector("#statusMessage");
 const modeInputs = document.querySelectorAll('input[name="qrType"]');
 const colorPalette = document.querySelector(".colorPalette");
@@ -129,9 +134,40 @@ function isValidUrl(value) {
   }
 }
 
+function escapeWifiValue(value) {
+  return value.replace(/([\\;,:"])/g, "\\$1");
+}
+
+function buildWifiPayload() {
+  const ssid = wifiSsidInput.value.trim();
+  const password = wifiPasswordInput.value.trim();
+  const security = wifiSecuritySelect.value;
+  const hidden = wifiHiddenInput.checked;
+
+  if (!ssid) {
+    setStatus("Digite o nome da rede Wi-Fi.", true);
+    return null;
+  }
+
+  if (security !== "nopass" && !password) {
+    setStatus("Digite a senha da rede Wi-Fi.", true);
+    return null;
+  }
+
+  const escapedSsid = escapeWifiValue(ssid);
+  const escapedPassword = escapeWifiValue(password);
+  const hiddenValue = hidden ? "true" : "false";
+
+  return `WIFI:T:${security};S:${escapedSsid};P:${escapedPassword};H:${hiddenValue};;`;
+}
+
 function getQrPayload() {
   const value = textInput.value.trim();
   const mode = getSelectedMode();
+
+  if (mode === "wifi") {
+    return buildWifiPayload();
+  }
 
   if (!value) {
     setStatus("Digite algum conteudo antes de gerar o QR code.", true);
@@ -143,8 +179,8 @@ function getQrPayload() {
     return null;
   }
 
-  if (mode === "vcard" || mode === "wifi") {
-    setStatus("Os modos vCard e Wi-fi ainda nao foram implementados nesta versao.", true);
+  if (mode === "vcard") {
+    setStatus("O modo vCard ainda nao foi implementado nesta versao.", true);
     return null;
   }
 
@@ -584,6 +620,25 @@ function scrollToOption(targetId) {
   syncActiveOptionTab(targetId);
 }
 
+function updateModeFields(mode) {
+  const isWifiMode = mode === "wifi";
+
+  wifiFields.classList.toggle("is-hidden", !isWifiMode);
+  textInput.disabled = isWifiMode;
+
+  if (mode === "url") {
+    textInput.placeholder = "https://exemplo.com";
+  } else if (mode === "text") {
+    textInput.placeholder = "Escreva um texto";
+  } else if (mode === "vcard") {
+    textInput.placeholder = "Modo vCard em breve";
+  } else if (isWifiMode) {
+    textInput.placeholder = "Use os campos de Wi-Fi abaixo";
+  } else {
+    textInput.placeholder = "Escreva um texto ou cole uma URL";
+  }
+}
+
 generateButton.addEventListener("click", () => {
   void generateQrCode();
 });
@@ -653,12 +708,7 @@ window.addEventListener("resize", () => {
 
 modeInputs.forEach((input) => {
   input.addEventListener("change", () => {
-    if (input.value === "url") {
-      textInput.placeholder = "https://exemplo.com";
-    } else {
-      textInput.placeholder = "Escreva um texto ou cole uma URL";
-    }
-
+    updateModeFields(input.value);
     setStatus("Modo atualizado. Gere um novo QR code para aplicar a mudanca.");
   });
 });
@@ -667,3 +717,4 @@ syncActiveSwatch();
 syncActiveDirection();
 syncActivePosition();
 syncActiveOptionTab("directionPanel");
+updateModeFields(getSelectedMode());
