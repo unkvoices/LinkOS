@@ -1,0 +1,143 @@
+@media screen and (max-width: 900px) {
+  body {
+    padding-top: 80px;
+  }
+
+  .container {
+    min-height: auto;
+    padding: 20px;
+  }
+
+  .pageSubtitle {
+    max-width: 40ch;
+  }
+}
+
+@media screen and (max-width: 680px) {
+  header {
+    height: auto;
+    padding: 12px 16px;
+  }
+
+  .logo {
+    font-size: 1.4rem;
+  }
+
+  .container {
+    width: 100%;
+    padding: 18px 14px 20px;
+    border-radius: 14px;
+    gap: 14px;
+  }
+
+  .introBlock {
+    text-align: left;
+    gap: 6px;
+  }
+
+  .pageTitle {
+    font-size: 1.9rem;
+  }
+
+  .pageSubtitle {
+    margin: 0;
+    font-size: 0.92rem;
+  }
+
+  .containerElement {
+    width: 100%;
+  }
+
+  .containerElement input,
+  .containerElement button,
+  .downloadBtn {
+    width: 100%;
+  }
+
+  #modeElement {
+    gap: 8px;
+  }
+
+  #modeElement > label {
+    width: calc(50% - 4px);
+    padding: 10px 8px;
+  }
+
+  #qrcode {
+    width: min(100%, 320px);
+    min-height: min(320px, 70vw);
+    padding: 14px;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  body {
+    padding: 72px 10px 16px;
+  }
+
+  .container {
+    padding: 16px 12px 18px;
+    border-radius: 12px;
+  }
+
+  .panel,
+  .inputPanel,
+  .previewPanel,
+  .qr_mode {
+    border-radius: 16px;
+  }
+
+  .eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+  }
+
+  .pageTitle {
+    font-size: 1.58rem;
+  }
+
+  .containerElement input {
+    font-size: 0.95rem;
+  }
+
+  .containerElement input,
+  .containerElement button {
+    min-height: 48px;
+    border-radius: 12px;
+  }
+
+  #modeElement {
+    flex-direction: column;
+  }
+
+  #modeElement > label {
+    width: 100%;
+    justify-content: flex-start;
+    padding-inline: 14px;
+  }
+
+  #statusMessage {
+    font-size: 0.88rem;
+  }
+
+  #qrcode {
+    width: 100%;
+    min-height: min(280px, 72vw);
+    border-radius: 18px;
+  }
+
+  .downloadBtn {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .container {
+    width: min(720px, 92vw);
+  }
+
+  #qrcode {
+    width: 380px;
+    min-height: 380px;
+  }
+}
