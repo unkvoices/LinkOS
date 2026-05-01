@@ -9,3 +9,4 @@ function generateQR() {
     height: 200
   });
 }
+ 

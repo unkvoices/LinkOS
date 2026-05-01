@@ -1,6 +1,16 @@
+
+:root{
+--color1: #010419;
+--color2 : #16192d ;
+--color3 : #2b2e42 ;
+--color4 : #3f4256 ;
+--color5 : #54576a ;
+}
+
+
 body {
   font-family: Arial, sans-serif;
-  background: #111;
+  background: var(--color1);
   color: #fff;
   text-align: center;
 }
