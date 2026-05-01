@@ -840,3 +840,67 @@ header {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* --- Modern Skeleton Loaders --- */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-strong) !important;
+  border-color: var(--border-soft) !important;
+  color: transparent !important;
+  pointer-events: none !important;
+  user-select: none !important;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(12, 184, 207, 0.05),
+    rgba(12, 184, 207, 0.2),
+    rgba(12, 184, 207, 0.05),
+    transparent
+  );
+  animation: skeleton-shimmer 2s infinite linear;
+}
+
+@keyframes skeleton-shimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+.skeleton-circle {
+  width: 220px;
+  height: 220px;
+  border-radius: 50% !important;
+  margin: 0 auto;
+}
+
+.skeleton-fade-out {
+  opacity: 0 !important;
+}
+
+/* Estilo para que o conteúdo interno não "vaze" o skeleton */
+.skeleton::placeholder {
+  color: transparent !important;
+}
+
+.skeleton svg, 
+.skeleton img,
+.skeleton span,
+.skeleton h4,
+.skeleton p {
+  visibility: hidden;
+}
+
+#qrcode:has(.skeleton-circle) {
+  background: none;
+  box-shadow: none;
+}

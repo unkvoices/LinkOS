@@ -917,10 +917,43 @@ modeInputs.forEach((input) => {
   });
 });
 
-syncActiveSwatch();
-syncActiveDirection();
-syncActivePosition();
-syncActiveOptionTab("directionPanel");
-updateModeFields(getSelectedMode());
-renderHistory();
-loadState();
+function initApp() {
+  syncActiveSwatch();
+  syncActiveDirection();
+  syncActivePosition();
+  syncActiveOptionTab("directionPanel");
+  updateModeFields(getSelectedMode());
+  renderHistory();
+
+  // Elementos que receberão o estado de skeleton
+  const skeletonElements = [
+    textInput,
+    generateButton,
+    clearButton,
+    statusMessage,
+    downloadButton,
+    shareButton,
+    colorPalette,
+    document.querySelector('.qr_mode')
+  ];
+
+  // Aplica a classe skeleton e injeta o círculo no QR container
+  skeletonElements.forEach(el => el?.classList.add('skeleton'));
+  qrContainer.innerHTML = '<div class="skeleton skeleton-circle"></div>';
+
+  // Aguarda 2 segundos (simulação de carregamento)
+  setTimeout(() => {
+    // Aplica o efeito de fade-out suave em todos os skeletons
+    const activeSkeletons = document.querySelectorAll('.skeleton, .skeleton-circle');
+    activeSkeletons.forEach(el => el.classList.add('skeleton-fade-out'));
+
+    // Aguarda o fim da transição de opacidade (500ms) para limpar e restaurar a UI
+    setTimeout(() => {
+      skeletonElements.forEach(el => el?.classList.remove('skeleton', 'skeleton-fade-out'));
+      qrContainer.innerHTML = '';
+      loadState();
+    }, 500);
+  }, 2000);
+}
+
+initApp();
