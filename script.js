@@ -9,6 +9,7 @@ const wifiSecuritySelect = document.querySelector("#wifiSecurity");
 const wifiHiddenInput = document.querySelector("#wifiHidden");
 const whatsappFields = document.querySelector("#whatsappFields");
 const waMessageInput = document.querySelector("#waMessage");
+const waMessageCounter = document.querySelector("#waMessageCounter");
 const statusMessage = document.querySelector("#statusMessage");
 const modeInputs = document.querySelectorAll('input[name="qrType"]');
 const colorPalette = document.querySelector(".colorPalette");
@@ -19,6 +20,7 @@ const optionTabIndicator = document.querySelector(".optionTabIndicator");
 const optionCarousel = document.querySelector(".optionCarousel");
 const directionButtons = document.querySelectorAll(".directionBtn");
 const positionButtons = document.querySelectorAll(".positionBtn");
+const clearButton = document.querySelector("#clear_btn");
 
 const QR_EXPORT_SIZE = 1000;
 const QR_PREVIEW_SIZE = 240;
@@ -26,6 +28,7 @@ const QR_LIGHT_COLOR = "#04373d";
 const DEFAULT_PRESET = "frost";
 const DEFAULT_DIRECTION = "diagonal";
 const DEFAULT_WATERMARK_POSITION = "bottom-right";
+const MAX_WA_MESSAGE_LENGTH = 250; // Limite de caracteres para a mensagem do WhatsApp
 const WATERMARK_PATH = "assets/linkos-watermark.png";
 
 const QR_PRESETS = {
@@ -188,11 +191,20 @@ function getQrPayload() {
 
   if (mode === "whatsapp") {
     const digits = value.replace(/\D/g, "");
-    if (!digits || digits.length < 10) {
-      setStatus("Digite um numero de WhatsApp valido (com DDD e sem simbolos).", true);
+    // Um número de WhatsApp internacional geralmente tem entre 11 e 13 dígitos (DDI + DDD + Número).
+    // Por exemplo, Brasil: 55 (DDI) + 11 (DDD) + 9xxxx-xxxx (9 dígitos) = 13 dígitos.
+    // Um mínimo de 11 dígitos ajuda a garantir que o DDI esteja presente.
+    if (!digits || digits.length < 11) {
+      setStatus("Digite um número de WhatsApp válido, incluindo o código do país (DDI) e DDD (Ex.: 5511999999999).", true);
       return null;
     }
+
     const message = waMessageInput.value.trim();
+    if (waMessageInput.value.length > MAX_WA_MESSAGE_LENGTH) {
+      setStatus(`A mensagem excede o limite de ${MAX_WA_MESSAGE_LENGTH} caracteres. Reduza o texto para gerar o QR code.`, true);
+      return null;
+    }
+
     const messageParam = message ? `?text=${encodeURIComponent(message)}` : "";
     return `https://wa.me/${digits}${messageParam}`;
   }
@@ -618,6 +630,40 @@ async function updateWatermarkPosition(position) {
   setStatus("Posicao da marca d'agua atualizada.");
 }
 
+function updateWaMessageCounter() {
+  const currentLength = waMessageInput.value.length;
+  waMessageCounter.textContent = `${currentLength}/${MAX_WA_MESSAGE_LENGTH}`;
+
+  if (currentLength > MAX_WA_MESSAGE_LENGTH) {
+    waMessageCounter.classList.add("exceeded");
+    if (getSelectedMode() === "whatsapp") generateButton.disabled = true;
+  } else {
+    waMessageCounter.classList.remove("exceeded");
+    if (getSelectedMode() === "whatsapp") generateButton.disabled = false;
+  }
+}
+
+function clearAllFields() {
+  // Limpa todos os inputs
+  textInput.value = "";
+  wifiSsidInput.value = "";
+  wifiPasswordInput.value = "";
+  wifiSecuritySelect.value = "WPA";
+  wifiHiddenInput.checked = false;
+  waMessageInput.value = "";
+
+  // Atualiza contadores e estado dos botões
+  updateWaMessageCounter();
+  
+  // Reseta a prévia e o estado interno
+  qrContainer.innerHTML = "";
+  lastGeneratedPayload = "";
+  downloadButton.disabled = true;
+  generateButton.disabled = false;
+
+  setStatus("Campos limpos. Escolha um tipo e digite o conteúdo.");
+}
+
 function scrollToOption(targetId) {
   const target = document.getElementById(targetId);
 
@@ -643,14 +689,19 @@ function updateModeFields(mode) {
 
   if (mode === "url") {
     textInput.placeholder = "https://exemplo.com";
+    generateButton.disabled = false;
   } else if (mode === "text") {
     textInput.placeholder = "Escreva um texto";
+    generateButton.disabled = false;
   } else if (mode === "whatsapp") {
     textInput.placeholder = "Ex.: 5511999999999";
+    updateWaMessageCounter(); // Atualiza o contador ao selecionar o modo WhatsApp
   } else if (isWifiMode) {
     textInput.placeholder = "Use os campos de Wi-Fi abaixo";
+    generateButton.disabled = false;
   } else {
     textInput.placeholder = "Escreva um texto ou cole uma URL";
+    generateButton.disabled = false;
   }
 }
 
@@ -669,6 +720,12 @@ textInput.addEventListener("keydown", (event) => {
     event.preventDefault();
     void generateQrCode();
   }
+});
+
+clearButton.addEventListener("click", clearAllFields);
+
+waMessageInput.addEventListener("input", () => {
+  updateWaMessageCounter();
 });
 
 colorSwatches.forEach((swatch) => {

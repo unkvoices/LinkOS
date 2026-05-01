@@ -29,7 +29,10 @@
             id="text"
             placeholder="Escreva um texto ou cole uma URL"
           />
-          <button id="gr_Gen">Gerar QR Code</button>
+          <div class="buttonGroup">
+            <button id="gr_Gen">Gerar QR Code</button>
+            <button id="clear_btn" class="secondaryBtn">Limpar</button>
+          </div>
         </div>
         <div class="modeFields is-hidden" id="wifiFields">
           <div class="fieldGrid">
@@ -71,6 +74,7 @@
                 id="waMessage"
                 placeholder="Digite a mensagem automatica que a pessoa enviara"
               ></textarea>
+              <div id="waMessageCounter" class="char-counter">0/250</div>
             </label>
           </div>
         </div>
