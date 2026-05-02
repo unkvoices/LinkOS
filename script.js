@@ -917,6 +917,14 @@ modeInputs.forEach((input) => {
   });
 });
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(reg => console.log('SW registrado', reg))
+      .catch(err => console.log('Erro no SW', err));
+  });
+}
+
 function initApp() {
   syncActiveSwatch();
   syncActiveDirection();
@@ -939,7 +947,7 @@ function initApp() {
 
   // Aplica a classe skeleton e injeta o círculo no QR container
   skeletonElements.forEach(el => el?.classList.add('skeleton'));
-  qrContainer.innerHTML = '<div class="skeleton skeleton-circle"></div>';
+  qrContainer.innerHTML = '<div class="skeleton skeleton-circle"><div class="spinner"></div></div>';
 
   // Aguarda 2 segundos (simulação de carregamento)
   setTimeout(() => {

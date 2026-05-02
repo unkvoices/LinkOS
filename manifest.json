@@ -1,0 +1,21 @@
+{
+    "name": "LinkOS QR Generator",
+    "short_name": "LinkOS",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#010419",
+    "theme_color": "#010419",
+    "description": "Gerador de QR Code Moderno e Profissional",
+    "icons": [
+        {
+            "src": "assets/logo_9.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/logo_9.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
