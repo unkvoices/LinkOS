@@ -535,27 +535,27 @@ header {
 }
 
 .colorSwatch[data-preset="sunset"] {
-  background: linear-gradient(135deg, #FEE9B2, #F9A870, #EF6C5F);
+  background: #a0ffba;
 }
 
 .colorSwatch[data-preset="ember"] {
-  background: linear-gradient(135deg, #FFDFB8, #FF8C42, #E84545);
+  background: #f5a6a5;
 }
 
 .colorSwatch[data-preset="copper"] {
-  background: linear-gradient(135deg, #FFE9D6, #F5A623, #D97706);
+  background: #a13384;
 }
 
 .colorSwatch[data-preset="berry"] {
-  background: linear-gradient(135deg, #FFDDF4, #F765A3, #D9006C);
+  background: #b7868a;
 }
 
 .colorSwatch[data-preset="lime"] {
-  background: linear-gradient(135deg, #E8FFB7, #B5F53B, #6EBF00);
+  background: #016d00;
 }
 
 .colorSwatch[data-preset="gold"] {
-  background: linear-gradient(135deg, #FFF9E3, #FFDB6E, #FCA311);
+  background: #aafecf;
 }
 
 .optionCarousel {

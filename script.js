@@ -36,41 +36,32 @@ const MAX_HISTORY = 5;
 
 const QR_PRESETS = {
   sunset: {
-    type: "linear",
-    colors: ["#FEE9B2", "#F9A870", "#EF6C5F"],
-    angle: 135
+    color: "#a0ffba"
   },
   ember: {
-    type: "linear",
-    colors: ["#FFDFB8", "#FF8C42", "#E84545"],
-    angle: 135
+    color: "#f5a6a5"
   },
   copper: {
-    type: "linear",
-    colors: ["#FFE9D6", "#F5A623", "#D97706"],
-    angle: 135
+    color: "#a13384"
   },
   berry: {
-    type: "linear",
-    colors: ["#FFDDF4", "#F765A3", "#D9006C"],
-    angle: 135
+    color: "#b7868a"
   },
   lime: {
-    type: "linear",
-    colors: ["#E8FFB7", "#B5F53B", "#6EBF00"],
-    angle: 135
+    color: "#016d00"
   },
   gold: {
-    type: "linear",
-    colors: ["#FFF9E3", "#FFDB6E", "#FCA311"],
-    angle: 135
+    color: "#aafecf"
   }
 };
 
 const watermarkImage = new Image();
 const watermarkReady = new Promise((resolve) => {
   watermarkImage.onload = () => resolve(watermarkImage);
-  watermarkImage.onerror = () => resolve(null);
+  watermarkImage.onerror = (e) => {
+    console.error("Erro ao carregar a imagem da marca d'água:", e);
+    resolve(null);
+  };
 });
 
 watermarkImage.src = WATERMARK_PATH;
@@ -144,14 +135,12 @@ window.loadHistoryItem = (index) => {
 
 async function shareQrCode() {
   if (!lastGeneratedPayload) return;
-  const canvas = await createWatermarkedCanvas(lastGeneratedPayload, QR_EXPORT_SIZE);
-  canvas.toBlob(async (blob) => {
-    const file = new File([blob], "qrcode.png", { type: "image/png" });
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try { await navigator.share({ files: [file], title: 'Meu QR Code', text: 'Gerado via linkOS' }); }
-      catch (err) { console.error("Erro ao compartilhar:", err); }
-    } else { setStatus("Seu navegador não suporta compartilhamento de arquivos.", true); }
-  });
+  const blob = await createWatermarkedCanvas(lastGeneratedPayload, QR_EXPORT_SIZE);
+  const file = new File([blob], "qrcode.png", { type: "image/png" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try { await navigator.share({ files: [file], title: 'Meu QR Code', text: 'Gerado via linkOS' }); }
+    catch (err) { console.error("Erro ao compartilhar:", err); }
+  } else { setStatus("Seu navegador não suporta compartilhamento de arquivos.", true); }
 }
 
 function saveState() {
@@ -351,197 +340,6 @@ function updateOptionIndicator(activeTab) {
   optionTabIndicator.style.transform = `translateX(${left}px)`;
 }
 
-function drawCircle(context, x, y, radius) {
-  context.beginPath();
-  context.arc(x, y, radius, 0, Math.PI * 2);
-  context.closePath();
-}
-
-function getGradientEndpoints(size, angle) {
-  const radians = angle * (Math.PI / 180);
-  const center = size / 2;
-  const radius = size / 2;
-  const offsetX = Math.cos(radians) * radius;
-  const offsetY = Math.sin(radians) * radius;
-
-  return {
-    x0: center - offsetX,
-    y0: center - offsetY,
-    x1: center + offsetX,
-    y1: center + offsetY
-  };
-}
-
-function createPresetGradient(context, size) {
-  const preset = QR_PRESETS[selectedPreset] || QR_PRESETS[DEFAULT_PRESET];
-  let gradient;
-
-  if (selectedDirection === "vertical") {
-    gradient = context.createLinearGradient(size / 2, 0, size / 2, size);
-  } else if (selectedDirection === "radial") {
-    gradient = context.createRadialGradient(size / 2, size / 2, size * 0.12, size / 2, size / 2, size * 0.62);
-  } else {
-    const { x0, y0, x1, y1 } = getGradientEndpoints(size, preset.angle || 135);
-    gradient = context.createLinearGradient(x0, y0, x1, y1);
-  }
-
-  const step = 1 / Math.max(1, preset.colors.length - 1);
-
-  preset.colors.forEach((color, index) => {
-    gradient.addColorStop(index * step, color);
-  });
-
-  return gradient;
-}
-
-function paintQrModules(sourceCanvas, size) {
-  const outputCanvas = document.createElement("canvas");
-  const context = outputCanvas.getContext("2d");
-  const sourceContext = sourceCanvas.getContext("2d");
-  const sourceImage = sourceContext.getImageData(0, 0, size, size);
-  const gradientCanvas = document.createElement("canvas");
-  const gradientContext = gradientCanvas.getContext("2d");
-  const gradient = createPresetGradient(gradientContext, size);
-
-  outputCanvas.width = size;
-  outputCanvas.height = size;
-  gradientCanvas.width = size;
-  gradientCanvas.height = size;
-  gradientContext.fillStyle = gradient;
-  gradientContext.fillRect(0, 0, size, size);
-
-  const gradientImage = gradientContext.getImageData(0, 0, size, size);
-  const outputImage = context.createImageData(size, size);
-
-  for (let index = 0; index < sourceImage.data.length; index += 4) {
-    const red = sourceImage.data[index];
-    const green = sourceImage.data[index + 1];
-    const blue = sourceImage.data[index + 2];
-    const alpha = sourceImage.data[index + 3];
-    const isModule = alpha > 0 && red < 128 && green < 128 && blue < 128;
-
-    if (!isModule) {
-      outputImage.data[index] = 0; // R
-      outputImage.data[index + 1] = 0; // G
-      outputImage.data[index + 2] = 0; // B
-      outputImage.data[index + 3] = 255;
-      continue;
-    }
-
-    outputImage.data[index] = gradientImage.data[index];
-    outputImage.data[index + 1] = gradientImage.data[index + 1];
-    outputImage.data[index + 2] = gradientImage.data[index + 2];
-    outputImage.data[index + 3] = 255;
-  }
-
-  context.putImageData(outputImage, 0, 0);
-  return outputCanvas;
-}
-
-function getWatermarkCoordinates(size, badgeSize, badgeMargin) {
-  if (selectedWatermarkPosition === "center") {
-    return {
-      x: Math.round((size - badgeSize) / 2),
-      y: Math.round((size - badgeSize) / 2)
-    };
-  }
-
-  if (selectedWatermarkPosition === "bottom-left") {
-    return {
-      x: badgeMargin,
-      y: size - badgeSize - badgeMargin
-    };
-  }
-
-  if (selectedWatermarkPosition === "top-right") {
-    return {
-      x: size - badgeSize - badgeMargin,
-      y: badgeMargin
-    };
-  }
-
-  return {
-    x: size - badgeSize - badgeMargin,
-    y: size - badgeSize - badgeMargin
-  };
-}
-
-async function addWatermarkToCanvas(sourceCanvas, size) {
-  const outputCanvas = document.createElement("canvas");
-  const context = outputCanvas.getContext("2d");
-  const logo = await watermarkReady;
-  const badgeSize = Math.round(size * 0.22); // Aumentado para melhor visibilidade
-  const badgeRadius = badgeSize / 2;
-  const badgeMargin = Math.round(size * 0.08);
-  const { x: badgeX, y: badgeY } = getWatermarkCoordinates(size, badgeSize, badgeMargin);
-  const badgeCenterX = badgeX + badgeRadius;
-  const badgeCenterY = badgeY + badgeRadius;
-
-  outputCanvas.width = size;
-  outputCanvas.height = size;
-
-  context.imageSmoothingEnabled = true;
-  context.drawImage(sourceCanvas, 0, 0, size, size);
-
-  // Desenha o fundo branco para a logo
-  drawCircle(context, badgeCenterX, badgeCenterY, badgeRadius + Math.round(size * 0.008));
-  context.fillStyle = "#FFFFFF";
-  context.fill();
-
-  if (!logo) {
-    console.warn("Logo não carregada, pulando a marca d'água.");
-    return outputCanvas;
-  }
-
-  // Desenha a logo
-  context.save();
-  drawCircle(context, badgeCenterX, badgeCenterY, badgeRadius);
-  context.clip();
-  context.drawImage(logo, badgeX, badgeY, badgeSize, badgeSize);
-  context.restore();
-
-  return outputCanvas;
-}
-
-function getCanvasFromImage(imageElement, size) {
-  const tempCanvas = document.createElement("canvas");
-  const tempContext = tempCanvas.getContext("2d");
-
-  tempCanvas.width = size;
-  tempCanvas.height = size;
-  tempContext.drawImage(imageElement, 0, 0, size, size);
-
-  return tempCanvas;
-}
-
-function waitForImageLoad(imageElement) {
-  if (imageElement.complete && imageElement.naturalWidth > 0) {
-    return Promise.resolve();
-  }
-
-  return new Promise((resolve) => {
-    imageElement.onload = () => resolve();
-    imageElement.onerror = () => resolve();
-  });
-}
-
-async function getRenderedSourceCanvas(qrRenderContainer, size) {
-  const rawCanvas = qrRenderContainer.querySelector("canvas");
-
-  if (rawCanvas) {
-    return rawCanvas;
-  }
-
-  const rawImage = qrRenderContainer.querySelector("img");
-
-  if (rawImage) {
-    await waitForImageLoad(rawImage);
-    return getCanvasFromImage(rawImage, size);
-  }
-
-  return null;
-}
-
 async function createWatermarkedCanvas(payload, size) {
   const qrRenderContainer = document.createElement("div");
 
@@ -552,37 +350,52 @@ async function createWatermarkedCanvas(payload, size) {
   qrRenderContainer.style.background = QR_LIGHT_COLOR;
   document.body.appendChild(qrRenderContainer);
 
-  new QRCode(qrRenderContainer, {
-    text: payload,
+  const preset = QR_PRESETS[selectedPreset] || QR_PRESETS[DEFAULT_PRESET];
+
+  const qrCode = new QRCodeStyling({
     width: size,
     height: size,
-    colorDark: "#000000",
-    colorLight: "#ffffff",
-    correctLevel: QRCode.CorrectLevel.H
+    data: payload,
+    margin: 0,
+    qrOptions: {
+      errorCorrectionLevel: "H"
+    },
+    dotsOptions: {
+      type: "rounded", // Cantos arredondados!
+      color: preset.color // Usando a cor sólida do preset
+    },
+    backgroundOptions: {
+      color: QR_LIGHT_COLOR
+    },
+    image: WATERMARK_PATH,
+    imageOptions: {
+      imageSize: 0.25, // Tamanho da logo
+      margin: 4, // Margem em volta da logo
+      hideBackgroundDots: true
+    }
   });
 
-  const rawCanvas = await getRenderedSourceCanvas(qrRenderContainer, size);
-  let watermarkedCanvas = null;
-
-  if (rawCanvas) {
-    const gradientCanvas = paintQrModules(rawCanvas, size);
-    watermarkedCanvas = await addWatermarkToCanvas(gradientCanvas, size);
-  }
-
-  qrRenderContainer.remove();
-  return watermarkedCanvas;
+  qrCode.append(qrRenderContainer);
+  return qrCode.getRawData("png").then(buffer => {
+    qrRenderContainer.remove();
+    return new Blob([buffer], { type: "image/png" });
+  });
 }
 
 async function renderQrCode(payload) {
   qrContainer.innerHTML = "";
-  const previewCanvas = await createWatermarkedCanvas(payload, QR_PREVIEW_SIZE);
+  const blob = await createWatermarkedCanvas(payload, QR_PREVIEW_SIZE);
 
-  if (!previewCanvas) {
+  if (!blob) {
     setStatus("Nao foi possivel renderizar o QR code.", true);
     return false;
   }
 
-  qrContainer.appendChild(previewCanvas);
+  const imageUrl = URL.createObjectURL(blob);
+  const img = document.createElement("img");
+  img.src = imageUrl;
+  img.onload = () => URL.revokeObjectURL(imageUrl);
+  qrContainer.appendChild(img);
   return true;
 }
 
@@ -619,16 +432,17 @@ async function downloadQrCode() {
     return;
   }
 
-  const exportCanvas = await createWatermarkedCanvas(lastGeneratedPayload, QR_EXPORT_SIZE);
+  const blob = await createWatermarkedCanvas(lastGeneratedPayload, QR_EXPORT_SIZE);
 
-  if (!exportCanvas) {
+  if (!blob) {
     setStatus("Nao foi possivel gerar o arquivo para download.", true);
     return;
   }
 
-  downloadLink.href = exportCanvas.toDataURL("image/png");
+  downloadLink.href = URL.createObjectURL(blob);
   downloadLink.download = "linkos-qrcode.png";
   downloadLink.click();
+  URL.revokeObjectURL(downloadLink.href);
 }
 
 async function updateQrPreset(presetName) {
