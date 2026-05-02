@@ -1,4 +1,4 @@
-const CACHE_NAME = 'linkos-v1';
+const CACHE_NAME = 'linkos-v2';
 const assets = [
     './',
     'index.html',

@@ -15,7 +15,6 @@ const statusMessage = document.querySelector("#statusMessage");
 const modeInputs = document.querySelectorAll('input[name="qrType"]');
 const colorPalette = document.querySelector(".colorPalette");
 const colorSwatches = document.querySelectorAll(".colorSwatch");
-const moreColorsButton = document.querySelector(".moreColorsBtn");
 const optionTabs = document.querySelectorAll(".optionTab");
 const optionTabIndicator = document.querySelector(".optionTabIndicator");
 const optionCarousel = document.querySelector(".optionCarousel");
@@ -27,78 +26,43 @@ const clearHistoryBtn = document.querySelector("#clear_history");
 
 const QR_EXPORT_SIZE = 1000;
 const QR_PREVIEW_SIZE = 240;
-const QR_LIGHT_COLOR = "#04373d";
-const DEFAULT_PRESET = "frost";
+const QR_LIGHT_COLOR = "#000000"; // Fundo preto
+const DEFAULT_PRESET = "sunset";
 const DEFAULT_DIRECTION = "diagonal";
 const DEFAULT_WATERMARK_POSITION = "bottom-right";
-const MAX_WA_MESSAGE_LENGTH = 250; // Limite de caracteres para a mensagem do WhatsApp
-const WATERMARK_PATH = "assets/linkOS_LOGO.svg";
+const MAX_WA_MESSAGE_LENGTH = 250;
+const WATERMARK_PATH = "assets/Ativo 1logo.png";
 const MAX_HISTORY = 5;
 
 const QR_PRESETS = {
-  frost: {
-    type: "linear",
-    colors: ["#f4f7fb", "#cfd9df", "#8fa5b3"],
-    angle: 135
-  },
-  aqua: {
-    type: "linear",
-    colors: ["#d9f8ff", "#0cb8cf", "#0a6170"],
-    angle: 135
-  },
-  whatsapp: {
-    type: "linear",
-    colors: ["#25D366", "#128C7E", "#075E54"],
-    angle: 135
-  },
-  forest: {
-    type: "linear",
-    colors: ["#d7ffd9", "#38b000", "#14532d"],
-    angle: 135
-  },
   sunset: {
     type: "linear",
-    colors: ["#fff0c9", "#ffd166", "#ff7b00"],
+    colors: ["#FEE9B2", "#F9A870", "#EF6C5F"],
     angle: 135
   },
   ember: {
     type: "linear",
-    colors: ["#ffd6d6", "#f23131", "#7a0404"],
+    colors: ["#FFDFB8", "#FF8C42", "#E84545"],
     angle: 135
   },
   copper: {
     type: "linear",
-    colors: ["#ffd7c2", "#ff7b00", "#8a3b12"],
-    angle: 135
-  },
-  violet: {
-    type: "linear",
-    colors: ["#f0dbff", "#9d4edd", "#3c096c"],
+    colors: ["#FFE9D6", "#F5A623", "#D97706"],
     angle: 135
   },
   berry: {
     type: "linear",
-    colors: ["#ffd6eb", "#ff4d8d", "#7a003c"],
-    angle: 135
-  },
-  lagoon: {
-    type: "linear",
-    colors: ["#d7fff8", "#2ec4b6", "#004e64"],
+    colors: ["#FFDDF4", "#F765A3", "#D9006C"],
     angle: 135
   },
   lime: {
     type: "linear",
-    colors: ["#f4ffd2", "#9ef01a", "#4f772d"],
+    colors: ["#E8FFB7", "#B5F53B", "#6EBF00"],
     angle: 135
   },
   gold: {
     type: "linear",
-    colors: ["#fff7d6", "#ffca3a", "#9c6644"],
-    angle: 135
-  },
-  mono: {
-    type: "linear",
-    colors: ["#fafafa", "#8c8c8c", "#101010"],
+    colors: ["#FFF9E3", "#FFDB6E", "#FCA311"],
     angle: 135
   }
 };
@@ -133,7 +97,7 @@ function addToHistory(payload, mode) {
     timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     date: new Date().toLocaleDateString()
   };
-  
+
   // Evita duplicados consecutivos
   if (history.length > 0 && history[0].payload === payload) return;
 
@@ -174,7 +138,7 @@ window.loadHistoryItem = (index) => {
   if (item.mode !== 'wifi') {
     textInput.value = item.payload;
   }
-  
+
   generateQrCode();
 };
 
@@ -220,7 +184,7 @@ function loadState() {
   wifiSecuritySelect.value = state.wifi?.sec || "WPA";
   wifiHiddenInput.checked = !!state.wifi?.hid;
   waMessageInput.value = state.wa || "";
-  
+
   selectedPreset = state.preset || DEFAULT_PRESET;
   selectedDirection = state.direction || DEFAULT_DIRECTION;
   selectedWatermarkPosition = state.position || DEFAULT_WATERMARK_POSITION;
@@ -387,13 +351,6 @@ function updateOptionIndicator(activeTab) {
   optionTabIndicator.style.transform = `translateX(${left}px)`;
 }
 
-function toggleExtraColors() {
-  const expanded = colorPalette.classList.toggle("is-expanded");
-  moreColorsButton.textContent = expanded ? "-" : "+";
-  moreColorsButton.setAttribute("aria-expanded", String(expanded));
-  moreColorsButton.setAttribute("aria-label", expanded ? "Mostrar menos cores" : "Mostrar mais cores");
-}
-
 function drawCircle(context, x, y, radius) {
   context.beginPath();
   context.arc(x, y, radius, 0, Math.PI * 2);
@@ -464,9 +421,9 @@ function paintQrModules(sourceCanvas, size) {
     const isModule = alpha > 0 && red < 128 && green < 128 && blue < 128;
 
     if (!isModule) {
-      outputImage.data[index] = 4;
-      outputImage.data[index + 1] = 55;
-      outputImage.data[index + 2] = 61;
+      outputImage.data[index] = 0; // R
+      outputImage.data[index + 1] = 0; // G
+      outputImage.data[index + 2] = 0; // B
       outputImage.data[index + 3] = 255;
       continue;
     }
@@ -513,7 +470,7 @@ async function addWatermarkToCanvas(sourceCanvas, size) {
   const outputCanvas = document.createElement("canvas");
   const context = outputCanvas.getContext("2d");
   const logo = await watermarkReady;
-  const badgeSize = Math.round(size * 0.16);
+  const badgeSize = Math.round(size * 0.22); // Aumentado para melhor visibilidade
   const badgeRadius = badgeSize / 2;
   const badgeMargin = Math.round(size * 0.08);
   const { x: badgeX, y: badgeY } = getWatermarkCoordinates(size, badgeSize, badgeMargin);
@@ -526,23 +483,19 @@ async function addWatermarkToCanvas(sourceCanvas, size) {
   context.imageSmoothingEnabled = true;
   context.drawImage(sourceCanvas, 0, 0, size, size);
 
-  drawCircle(context, badgeCenterX, badgeCenterY, badgeRadius + Math.round(size * 0.01));
-  context.fillStyle = "rgba(225, 226, 227, 0.76)";
+  // Desenha o fundo branco para a logo
+  drawCircle(context, badgeCenterX, badgeCenterY, badgeRadius + Math.round(size * 0.008));
+  context.fillStyle = "#FFFFFF";
   context.fill();
-
-  drawCircle(context, badgeCenterX, badgeCenterY, badgeRadius);
-  context.fillStyle = "none";
-  context.fill();
-  context.lineWidth = Math.max(2, Math.round(size * 0.004));
-  context.strokeStyle = "rgba(12, 184, 207, 0)";
-  context.stroke();
 
   if (!logo) {
+    console.warn("Logo não carregada, pulando a marca d'água.");
     return outputCanvas;
   }
 
+  // Desenha a logo
   context.save();
-  drawCircle(context, badgeCenterX, badgeCenterY, badgeRadius - Math.round(size * 0.006));
+  drawCircle(context, badgeCenterX, badgeCenterY, badgeRadius);
   context.clip();
   context.drawImage(logo, badgeX, badgeY, badgeSize, badgeSize);
   context.restore();
@@ -777,7 +730,7 @@ function clearAllFields() {
 
   // Atualiza contadores e estado dos botões
   updateWaMessageCounter();
-  
+
   // Reseta a prévia e o estado interno
   qrContainer.innerHTML = "";
   lastGeneratedPayload = "";
@@ -834,11 +787,16 @@ generateButton.addEventListener("click", () => {
   void generateQrCode();
 });
 
+clearHistoryBtn.addEventListener("click", () => {
+  localStorage.removeItem("linkos_history");
+  renderHistory();
+});
+
+clearButton.addEventListener("click", clearAllFields);
+
 downloadButton.addEventListener("click", () => {
   void downloadQrCode();
 });
-
-moreColorsButton.addEventListener("click", toggleExtraColors);
 
 textInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
@@ -848,12 +806,6 @@ textInput.addEventListener("keydown", (event) => {
 });
 
 shareButton.addEventListener("click", shareQrCode);
-clearHistoryBtn.addEventListener("click", () => {
-  localStorage.removeItem("linkos_history");
-  renderHistory();
-});
-
-clearButton.addEventListener("click", clearAllFields);
 
 waMessageInput.addEventListener("input", () => {
   updateWaMessageCounter();
