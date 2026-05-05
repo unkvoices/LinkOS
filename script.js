@@ -34,7 +34,7 @@ const QR_PREVIEW_SIZE = 240;
 const MAX_WA_MESSAGE_LENGTH = 250;
 const MAX_TEXT_LENGTH = 150;
 const WATERMARK_PATH = "assets/Ativo 1logo.png";
-const MAX_HISTORY = 5;
+const MAX_HISTORY = 10;
 
 const QR_THEMES = {
   claro: {
@@ -492,7 +492,7 @@ function clearAllFields() {
   // Atualiza contadores e estado dos botões
   updateWaMessageCounter();
   updateMainTextareaCounter();
-  
+
   // Reseta altura do textarea
   mainTextarea.style.height = "100px";
 
@@ -706,7 +706,7 @@ function initApp() {
 
   // Aguarda 2 segundos (simulação de carregamento)
   const minWait = new Promise(resolve => setTimeout(resolve, 2000));
-  
+
   // Otimização de fontes: espera o navegador carregar as fontes antes de prosseguir
   Promise.all([minWait, document.fonts.ready]).then(() => {
     // Remove bloqueios e inicia a transição de nitidez (blur -> sharp)
