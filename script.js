@@ -648,6 +648,10 @@ if ('serviceWorker' in navigator) {
 }
 
 function initApp() {
+  const splash = document.getElementById('splash-screen');
+  // Ativa bloqueio de scroll e estado de loading inicial
+  document.body.classList.add('no-scroll', 'is-loading');
+
   updateModeFields(getSelectedMode());
   renderHistory();
 
@@ -671,6 +675,12 @@ function initApp() {
 
   // Aguarda 2 segundos (simulação de carregamento)
   setTimeout(() => {
+    // Remove bloqueios e inicia a transição de nitidez (blur -> sharp)
+    document.body.classList.remove('no-scroll', 'is-loading');
+
+    // Remove o Splash Screen adicionando a classe de fade-out
+    if (splash) splash.classList.add('fade-out');
+
     // Aplica o efeito de fade-out suave em todos os skeletons
     const activeSkeletons = document.querySelectorAll('.skeleton, .skeleton-circle');
     activeSkeletons.forEach(el => el.classList.add('skeleton-fade-out'));

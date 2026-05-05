@@ -33,6 +33,14 @@
     <link rel="stylesheet" href="footer.css" />
   </head>
   <body>
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+      <div class="splash-content">
+        <img src="assets/Ativo 1logo.png" alt="LinkOS Logo" class="splash-logo" />
+        <div class="splash-loader"></div>
+      </div>
+    </div>
+
     <section class="container">
       <div class="mainLogo">
         <img src="assets/Ativo 1logo.png" alt="LinkOS Logo" />
@@ -52,7 +60,7 @@
             placeholder="Escreva seu texto aqui..."
           ></textarea>
           <div id="textareaFooter" class="textarea-footer is-hidden">
-            <div id="mainTextareaCounter" class="char-counter">0/1000</div>
+            <div id="mainTextareaCounter" class="char-counter">0/150</div>
           </div>
           <div class="buttonGroup">
             <button id="gr_Gen" title="Gerar QR Code">
@@ -61,10 +69,18 @@
             <button id="clear_btn" class="secondaryBtn" title="Limpar Campos">
               <i class="fas fa-eraser"></i>
             </button>
-            <button id="copy_textarea_btn" class="is-hidden" title="Copiar Texto">
+            <button
+              id="copy_textarea_btn"
+              class="is-hidden"
+              title="Copiar Texto"
+            >
               <i class="fas fa-copy"></i>
             </button>
-            <button id="paste_textarea_btn" class="is-hidden" title="Colar Texto">
+            <button
+              id="paste_textarea_btn"
+              class="is-hidden"
+              title="Colar Texto"
+            >
               <i class="fas fa-paste"></i>
             </button>
           </div>

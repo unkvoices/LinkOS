@@ -123,14 +123,16 @@
     border-radius: 12px;
   }
 
+  /* Mantém os ícones de modo em linha para economizar espaço vertical */
   #modeElement {
-    flex-direction: column;
+    flex-direction: row !important;
+    flex-wrap: nowrap;
+    gap: 10px;
   }
 
   #modeElement>label {
-    width: 100%;
-    justify-content: flex-start;
-    padding-inline: 14px;
+    width: 48px !important;
+    flex: 0 0 auto;
   }
 
   #statusMessage {
