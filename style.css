@@ -291,15 +291,10 @@ textarea,
 
 .textarea-footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   width: min(100%, 460px);
   margin-top: 4px;
-}
-
-.footer-actions {
-  display: flex;
-  gap: 12px;
 }
 
 .char-counter {

@@ -516,6 +516,8 @@ function updateModeFields(mode) {
   mainTextarea.classList.toggle("is-hidden", !isTextMode);
   mainTextareaCounter.classList.toggle("is-hidden", !isTextMode);
   textareaFooter.classList.toggle("is-hidden", !isTextMode);
+  copyTextareaBtn.classList.toggle("is-hidden", !isTextMode);
+  pasteTextareaBtn.classList.toggle("is-hidden", !isTextMode);
   textInput.disabled = isWifiMode || isTextMode;
 
   if (mode === "url") {
