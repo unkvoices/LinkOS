@@ -60,9 +60,7 @@
   .downloadBtn,
   .colorPalette,
   .gradientDirection,
-  .watermarkPosition,
-  .optionTabs,
-  .optionCarousel {
+  .watermarkPosition {
     width: 100%;
   }
 
@@ -70,7 +68,7 @@
     gap: 8px;
   }
 
-  #modeElement > label {
+  #modeElement>label {
     width: calc(50% - 4px);
     padding: 10px 8px;
   }
@@ -127,7 +125,7 @@
     flex-direction: column;
   }
 
-  #modeElement > label {
+  #modeElement>label {
     width: 100%;
     justify-content: flex-start;
     padding-inline: 14px;

@@ -15,45 +15,53 @@ const statusMessage = document.querySelector("#statusMessage");
 const modeInputs = document.querySelectorAll('input[name="qrType"]');
 const colorPalette = document.querySelector(".colorPalette");
 const colorSwatches = document.querySelectorAll(".colorSwatch");
-const optionTabs = document.querySelectorAll(".optionTab");
-const optionTabIndicator = document.querySelector(".optionTabIndicator");
-const optionCarousel = document.querySelector(".optionCarousel");
-const directionButtons = document.querySelectorAll(".directionBtn");
-const positionButtons = document.querySelectorAll(".positionBtn");
+const currentColorLabel = document.querySelector("#currentColorLabel");
+const currentColorSwatch = document.querySelector(".currentColorSwatch");
 const clearButton = document.querySelector("#clear_btn");
 const historyList = document.querySelector("#historyList");
 const clearHistoryBtn = document.querySelector("#clear_history");
 
-const QR_EXPORT_SIZE = 1000;
+const QR_EXPORT_SIZE = 1500;
 const QR_PREVIEW_SIZE = 240;
 const QR_LIGHT_COLOR = "#000000"; // Fundo preto
 const DEFAULT_PRESET = "sunset";
-const DEFAULT_DIRECTION = "diagonal";
-const DEFAULT_WATERMARK_POSITION = "bottom-right";
 const MAX_WA_MESSAGE_LENGTH = 250;
 const WATERMARK_PATH = "assets/Ativo 1logo.png";
 const MAX_HISTORY = 5;
 
 const QR_PRESETS = {
   sunset: {
-    color: "#a0ffba"
+    color: "#ececec"
   },
   ember: {
     color: "#f5a6a5"
   },
   copper: {
-    color: "#a13384"
+    color: "#da2dac"
   },
   berry: {
-    color: "#b7868a"
+    color: "#cf4014"
   },
   lime: {
-    color: "#016d00"
+    color: "#39dab7"
   },
   gold: {
     color: "#aafecf"
   }
 };
+
+const DEFAULT_PREVIEW_TEXT = "Francisco Armando";
+
+async function renderDefaultPreview() {
+  const blob = await createWatermarkedCanvas(DEFAULT_PREVIEW_TEXT, QR_PREVIEW_SIZE);
+  const imageUrl = URL.createObjectURL(blob);
+  const img = document.createElement("img");
+  img.src = imageUrl;
+  img.onload = () => URL.revokeObjectURL(imageUrl);
+  qrContainer.innerHTML = "";
+  qrContainer.appendChild(img);
+  setStatus("QR padrão carregado. Digite um texto e gere o seu.");
+}
 
 const watermarkImage = new Image();
 const watermarkReady = new Promise((resolve) => {
@@ -68,8 +76,6 @@ watermarkImage.src = WATERMARK_PATH;
 
 let lastGeneratedPayload = "";
 let selectedPreset = DEFAULT_PRESET;
-let selectedDirection = DEFAULT_DIRECTION;
-let selectedWatermarkPosition = DEFAULT_WATERMARK_POSITION;
 
 function getSelectedMode() {
   return document.querySelector('input[name="qrType"]:checked')?.value || "";
@@ -155,8 +161,6 @@ function saveState() {
     },
     wa: waMessageInput.value,
     preset: selectedPreset,
-    direction: selectedDirection,
-    position: selectedWatermarkPosition,
     hasQr: !!lastGeneratedPayload
   };
   localStorage.setItem("linkos_state", JSON.stringify(state));
@@ -164,7 +168,10 @@ function saveState() {
 
 function loadState() {
   const saved = localStorage.getItem("linkos_state");
-  if (!saved) return;
+  if (!saved) {
+    void renderDefaultPreview();
+    return;
+  }
 
   const state = JSON.parse(saved);
   textInput.value = state.text || "";
@@ -175,14 +182,16 @@ function loadState() {
   waMessageInput.value = state.wa || "";
 
   selectedPreset = state.preset || DEFAULT_PRESET;
-  selectedDirection = state.direction || DEFAULT_DIRECTION;
-  selectedWatermarkPosition = state.position || DEFAULT_WATERMARK_POSITION;
 
   modeInputs.forEach(input => {
     if (input.value === state.mode) input.checked = true;
   });
 
-  if (state.hasQr) generateQrCode();
+  if (state.hasQr) {
+    generateQrCode();
+  } else {
+    void renderDefaultPreview();
+  }
 }
 
 function normalizeUrl(value) {
@@ -288,56 +297,21 @@ function getQrPayload() {
 }
 
 function syncActiveSwatch() {
+  const preset = QR_PRESETS[selectedPreset] || QR_PRESETS[DEFAULT_PRESET];
+
   colorSwatches.forEach((swatch) => {
     const isActive = swatch.dataset.preset === selectedPreset;
     swatch.classList.toggle("is-active", isActive);
     swatch.setAttribute("aria-pressed", String(isActive));
   });
-}
 
-function syncActiveDirection() {
-  directionButtons.forEach((button) => {
-    const isActive = button.dataset.direction === selectedDirection;
-    button.classList.toggle("is-active", isActive);
-    button.setAttribute("aria-pressed", String(isActive));
-  });
-}
-
-function syncActivePosition() {
-  positionButtons.forEach((button) => {
-    const isActive = button.dataset.position === selectedWatermarkPosition;
-    button.classList.toggle("is-active", isActive);
-    button.setAttribute("aria-pressed", String(isActive));
-  });
-}
-
-function syncActiveOptionTab(targetId) {
-  let activeTab = null;
-
-  optionTabs.forEach((tab) => {
-    const isActive = tab.dataset.target === targetId;
-    tab.classList.toggle("is-active", isActive);
-    tab.setAttribute("aria-selected", String(isActive));
-
-    if (isActive) {
-      activeTab = tab;
-    }
-  });
-
-  updateOptionIndicator(activeTab);
-}
-
-function updateOptionIndicator(activeTab) {
-  if (!optionTabIndicator || !activeTab) {
-    return;
+  if (currentColorLabel) {
+    currentColorLabel.textContent = preset.color;
   }
 
-  const tabsRect = activeTab.parentElement.getBoundingClientRect();
-  const tabRect = activeTab.getBoundingClientRect();
-  const left = tabRect.left - tabsRect.left;
-
-  optionTabIndicator.style.width = `${tabRect.width}px`;
-  optionTabIndicator.style.transform = `translateX(${left}px)`;
+  if (currentColorSwatch) {
+    currentColorSwatch.style.background = preset.color;
+  }
 }
 
 async function createWatermarkedCanvas(payload, size) {
@@ -465,55 +439,6 @@ async function updateQrPreset(presetName) {
   saveState();
 }
 
-async function updateGradientDirection(direction) {
-  selectedDirection = ["diagonal", "vertical", "radial"].includes(direction)
-    ? direction
-    : DEFAULT_DIRECTION;
-  syncActiveDirection();
-
-  if (!lastGeneratedPayload) {
-    setStatus("Direcao do gradiente atualizada.", false);
-    return;
-  }
-
-  const rendered = await renderQrCode(lastGeneratedPayload);
-
-  if (!rendered) {
-    setStatus("Nao foi possivel aplicar a nova direcao.", true);
-    return;
-  }
-
-  setStatus("Direcao do gradiente atualizada.");
-  saveState();
-}
-
-async function updateWatermarkPosition(position) {
-  selectedWatermarkPosition = [
-    "center",
-    "bottom-right",
-    "bottom-left",
-    "top-right"
-  ].includes(position)
-    ? position
-    : DEFAULT_WATERMARK_POSITION;
-  syncActivePosition();
-
-  if (!lastGeneratedPayload) {
-    setStatus("Posicao da marca d'agua atualizada.", false);
-    return;
-  }
-
-  const rendered = await renderQrCode(lastGeneratedPayload);
-
-  if (!rendered) {
-    setStatus("Nao foi possivel aplicar a nova posicao.", true);
-    return;
-  }
-
-  setStatus("Posicao da marca d'agua atualizada.");
-  saveState();
-}
-
 function updateWaMessageCounter() {
   const currentLength = waMessageInput.value.length;
   waMessageCounter.textContent = `${currentLength}/${MAX_WA_MESSAGE_LENGTH}`;
@@ -556,21 +481,6 @@ function clearAllFields() {
   setStatus("Campos limpos. Escolha um tipo e digite o conteúdo.");
 }
 
-function scrollToOption(targetId) {
-  const target = document.getElementById(targetId);
-
-  if (!target) {
-    return;
-  }
-
-  target.scrollIntoView({
-    behavior: "smooth",
-    block: "nearest",
-    inline: "start"
-  });
-  syncActiveOptionTab(targetId);
-}
-
 function updateModeFields(mode) {
   const isWifiMode = mode === "wifi";
   const isWhatsappMode = mode === "whatsapp";
@@ -586,7 +496,7 @@ function updateModeFields(mode) {
     textInput.placeholder = "Escreva um texto";
     generateButton.disabled = false;
   } else if (mode === "whatsapp") {
-    textInput.placeholder = "Ex.: 5511999999999";
+    textInput.placeholder = "Ex.: +258 999999999";
     updateWaMessageCounter(); // Atualiza o contador ao selecionar o modo WhatsApp
   } else if (isWifiMode) {
     textInput.placeholder = "Use os campos de Wi-Fi abaixo";
@@ -631,44 +541,7 @@ colorSwatches.forEach((swatch) => {
   });
 });
 
-optionTabs.forEach((tab) => {
-  tab.addEventListener("click", () => {
-    scrollToOption(tab.dataset.target);
-  });
-});
 
-directionButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    void updateGradientDirection(button.dataset.direction);
-  });
-});
-
-positionButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    void updateWatermarkPosition(button.dataset.position);
-  });
-});
-
-optionCarousel.addEventListener("scroll", () => {
-  const panels = Array.from(optionCarousel.querySelectorAll(".optionCard"));
-  const carouselLeft = optionCarousel.getBoundingClientRect().left;
-
-  let nearestPanel = panels[0];
-  let nearestDistance = Number.POSITIVE_INFINITY;
-
-  panels.forEach((panel) => {
-    const distance = Math.abs(panel.getBoundingClientRect().left - carouselLeft);
-
-    if (distance < nearestDistance) {
-      nearestDistance = distance;
-      nearestPanel = panel;
-    }
-  });
-
-  if (nearestPanel?.id) {
-    syncActiveOptionTab(nearestPanel.id);
-  }
-});
 
 window.addEventListener("resize", () => {
   const activeTab = document.querySelector(".optionTab.is-active");
@@ -693,9 +566,6 @@ if ('serviceWorker' in navigator) {
 
 function initApp() {
   syncActiveSwatch();
-  syncActiveDirection();
-  syncActivePosition();
-  syncActiveOptionTab("directionPanel");
   updateModeFields(getSelectedMode());
   renderHistory();
 

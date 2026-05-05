@@ -414,6 +414,26 @@ header {
   font-size: 0.95rem;
 }
 
+.currentColorInfo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.currentColorSwatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ececec;
+}
+
 .paletteOptions {
   width: 100%;
   display: flex;
@@ -452,219 +472,6 @@ header {
   box-shadow:
     0 0 0 2px rgba(255, 255, 255, 0.12) inset,
     0 0 0 3px rgba(12, 184, 207, 0.7);
-}
-
-.optionTabs {
-  width: min(100%, 360px);
-  position: relative;
-  display: flex;
-  gap: 10px;
-  padding: 4px;
-  border-radius: 999px;
-  border: 1px solid rgba(12, 184, 207, 0.2);
-  background: rgba(255, 255, 255, 0.03);
-  overflow: hidden;
-}
-
-.optionTabIndicator {
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  width: calc(50% - 7px);
-  height: calc(100% - 8px);
-  border-radius: 999px;
-  background: linear-gradient(180deg, rgba(12, 184, 207, 0.22), rgba(8, 127, 143, 0.16));
-  box-shadow:
-    0 0 0 1px rgba(12, 184, 207, 0.18) inset,
-    0 10px 24px rgba(8, 127, 143, 0.16);
-  transition: transform 220ms ease, width 220ms ease;
-  pointer-events: none;
-}
-
-.optionTab {
-  flex: 1;
-  position: relative;
-  z-index: 1;
-  min-height: 42px;
-  border-radius: 999px;
-  border: none;
-  background: transparent;
-  color: var(--color6);
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform 160ms ease, color 160ms ease;
-}
-
-.optionTab:hover {
-  transform: translateY(-1px);
-}
-
-.optionTab.is-active {
-  color: #f4fbff;
-}
-
-.colorPalette.is-expanded .colorSwatch.is-hidden {
-  display: inline-block;
-}
-
-.colorSwatch:hover {
-  transform: translateY(-1px);
-}
-
-.colorSwatch:focus-visible {
-  outline: 2px solid rgba(12, 184, 207, 0.75);
-  outline-offset: 3px;
-}
-
-.colorSwatch.is-active {
-  box-shadow:
-    0 0 0 2px rgba(255, 255, 255, 0.12) inset,
-    0 0 0 3px rgba(12, 184, 207, 0.7);
-}
-
-.colorSwatch[data-preset="whatsapp"] {
-  background: linear-gradient(135deg, #25D366 0%, #128C7E 45%, #075E54 100%);
-}
-
-.colorSwatch[data-preset="aqua"] {
-  background: linear-gradient(135deg, #d9f8ff 0%, #0cb8cf 45%, #0a6170 100%);
-}
-
-.colorSwatch[data-preset="forest"] {
-  background: linear-gradient(135deg, #d7ffd9 0%, #38b000 45%, #14532d 100%);
-}
-
-.colorSwatch[data-preset="sunset"] {
-  background: #a0ffba;
-}
-
-.colorSwatch[data-preset="ember"] {
-  background: #f5a6a5;
-}
-
-.colorSwatch[data-preset="copper"] {
-  background: #a13384;
-}
-
-.colorSwatch[data-preset="berry"] {
-  background: #b7868a;
-}
-
-.colorSwatch[data-preset="lime"] {
-  background: #016d00;
-}
-
-.colorSwatch[data-preset="gold"] {
-  background: #aafecf;
-}
-
-.optionCarousel {
-  width: min(100%, 360px);
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 100%;
-  gap: 14px;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-}
-
-.optionCard {
-  scroll-snap-align: start;
-}
-
-.gradientDirection {
-  width: 100%;
-  padding: 10px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  border-radius: 22px;
-  border: 1px solid rgba(12, 184, 207, 0.28);
-  background: linear-gradient(180deg, rgba(12, 184, 207, 0.08), rgba(8, 127, 143, 0.06));
-  color: var(--color6);
-  font-weight: 600;
-}
-
-.directionLabel {
-  font-size: 0.95rem;
-}
-
-.directionOptions {
-  width: 100%;
-  display: flex;
-  gap: 10px;
-}
-
-.directionBtn {
-  flex: 1;
-  min-height: 40px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--color6);
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
-}
-
-.directionBtn:hover {
-  transform: translateY(-1px);
-  border-color: rgba(12, 184, 207, 0.35);
-}
-
-.directionBtn.is-active {
-  border-color: rgba(12, 184, 207, 0.72);
-  background: linear-gradient(180deg, rgba(12, 184, 207, 0.18), rgba(8, 127, 143, 0.14));
-  box-shadow: 0 0 0 1px rgba(12, 184, 207, 0.18) inset;
-}
-
-.watermarkPosition {
-  width: 100%;
-  padding: 10px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  border-radius: 22px;
-  border: 1px solid rgba(12, 184, 207, 0.28);
-  background: linear-gradient(180deg, rgba(12, 184, 207, 0.06), rgba(8, 127, 143, 0.05));
-  color: var(--color6);
-  font-weight: 600;
-}
-
-.positionLabel {
-  font-size: 0.95rem;
-}
-
-.positionOptions {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.positionBtn {
-  flex: 1 1 calc(50% - 5px);
-  min-height: 40px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--color6);
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
-}
-
-.positionBtn:hover {
-  transform: translateY(-1px);
-  border-color: rgba(12, 184, 207, 0.35);
-}
-
-.positionBtn.is-active {
-  border-color: rgba(12, 184, 207, 0.72);
-  background: linear-gradient(180deg, rgba(12, 184, 207, 0.18), rgba(8, 127, 143, 0.14));
-  box-shadow: 0 0 0 1px rgba(12, 184, 207, 0.18) inset;
 }
 
 #statusMessage {

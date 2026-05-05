@@ -129,6 +129,10 @@
           aria-label="Paleta de cores do QR code"
         >
           <span class="paletteLabel">Personalizar cor</span>
+          <div class="currentColorInfo">
+            <span class="currentColorSwatch" aria-hidden="true"></span>
+            <span id="currentColorLabel">#ececec</span>
+          </div>
           <div class="paletteOptions">
             <button
               class="colorSwatch is-active"
@@ -168,96 +172,7 @@
             ></button>
           </div>
         </div>
-        <div
-          class="optionTabs"
-          role="tablist"
-          aria-label="Opcoes de personalizacao"
-        >
-          <span class="optionTabIndicator" aria-hidden="true"></span>
-          <button
-            class="optionTab is-active"
-            type="button"
-            data-target="directionPanel"
-            aria-selected="true"
-          >
-            Direcao
-          </button>
-          <button
-            class="optionTab"
-            type="button"
-            data-target="watermarkPanel"
-            aria-selected="false"
-          >
-            Marca d'agua
-          </button>
-        </div>
-        <div class="optionCarousel" aria-label="Carrossel de opcoes">
-          <section
-            class="gradientDirection optionCard"
-            id="directionPanel"
-            role="group"
-            aria-label="Direcao do gradiente"
-          >
-            <span class="directionLabel">Direção do Gradiente</span>
-            <div class="directionOptions">
-              <button
-                class="directionBtn is-active"
-                type="button"
-                data-direction="diagonal"
-              >
-                Diagonal
-              </button>
-              <button
-                class="directionBtn"
-                type="button"
-                data-direction="vertical"
-              >
-                Vertical
-              </button>
-              <button
-                class="directionBtn"
-                type="button"
-                data-direction="radial"
-              >
-                Radial
-              </button>
-            </div>
-          </section>
-          <section
-            class="watermarkPosition optionCard"
-            id="watermarkPanel"
-            role="group"
-            aria-label="Posicao da marca d'agua"
-          >
-            <span class="positionLabel">Marca d'agua</span>
-            <div class="positionOptions">
-              <button class="positionBtn" type="button" data-position="center">
-                Centro
-              </button>
-              <button
-                class="positionBtn is-active"
-                type="button"
-                data-position="bottom-right"
-              >
-                Inf. direita
-              </button>
-              <button
-                class="positionBtn"
-                type="button"
-                data-position="bottom-left"
-              >
-                Inf. esquerda
-              </button>
-              <button
-                class="positionBtn"
-                type="button"
-                data-position="top-right"
-              >
-                Sup. direita
-              </button>
-            </div>
-          </section>
-        </div>
+
         <div class="actionButtons">
           <button class="downloadBtn" type="button" disabled>
             Download PNG
@@ -309,7 +224,7 @@
         </a>
       </div>
       <p class="copyrightText">
-        &copy; 2024 LinkOS. Todos os direitos reservados.
+        &copy; 2026 LinkOS. Todos os direitos reservados.
       </p>
     </footer>
     <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
