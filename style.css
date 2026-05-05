@@ -55,6 +55,7 @@ body {
 
 /* Bloqueio de scroll durante o splash */
 body.no-scroll {
+  height: 100dvh !important;
   overflow: hidden !important;
   touch-action: none;
 }
@@ -727,6 +728,7 @@ button:disabled {
   z-index: 100000;
   transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
   overflow: hidden;
+  touch-action: none;
 }
 
 .splash-content {
@@ -761,6 +763,15 @@ button:disabled {
   width: 50%;
   background: var(--c1);
   animation: splash-loading 1.5s infinite ease-in-out;
+}
+
+.splash-phrase {
+  font-size: 0.8rem;
+  color: rgba(225, 226, 227, 0.4);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-align: center;
+  margin-top: -8px;
 }
 
 @keyframes splash-pulse {

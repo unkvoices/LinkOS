@@ -647,10 +647,22 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+const SPLASH_PHRASES = [
+  "Gerando conexões...",
+  "Dica: Tente o modo escuro!",
+  "Rápido. Simples. LinkOS.",
+  "Seu QR Code, seu estilo.",
+  "Otimizando sua experiência...",
+  "Quase lá..."
+];
+
 function initApp() {
   const splash = document.getElementById('splash-screen');
+  const phraseEl = document.getElementById('splash-phrase');
   // Ativa bloqueio de scroll e estado de loading inicial
   document.body.classList.add('no-scroll', 'is-loading');
+
+  if (phraseEl) phraseEl.textContent = SPLASH_PHRASES[Math.floor(Math.random() * SPLASH_PHRASES.length)];
 
   updateModeFields(getSelectedMode());
   renderHistory();
@@ -674,7 +686,10 @@ function initApp() {
   qrContainer.innerHTML = '<div class="skeleton skeleton-circle"><div class="spinner"></div></div>';
 
   // Aguarda 2 segundos (simulação de carregamento)
-  setTimeout(() => {
+  const minWait = new Promise(resolve => setTimeout(resolve, 2000));
+  
+  // Otimização de fontes: espera o navegador carregar as fontes antes de prosseguir
+  Promise.all([minWait, document.fonts.ready]).then(() => {
     // Remove bloqueios e inicia a transição de nitidez (blur -> sharp)
     document.body.classList.remove('no-scroll', 'is-loading');
 
