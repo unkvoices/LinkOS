@@ -637,19 +637,6 @@ qrThemeInputs.forEach((input) => {
 
 
 
-window.addEventListener("resize", () => {
-  const activeTab = document.querySelector(".optionTab.is-active");
-  updateOptionIndicator(activeTab);
-});
-
-modeInputs.forEach((input) => {
-  input.addEventListener("change", () => {
-    updateModeFields(input.value);
-    saveState();
-    setStatus("Modo atualizado. Gere um novo QR code para aplicar a mudanca.");
-  });
-});
-
 function showToast(message) {
   const toast = document.createElement('div');
   toast.className = 'toast';

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'linkos-pwa-v4';
+const CACHE_NAME = 'linkos-pwa-v5';
 const assets = [
     '/',
     'index.html',

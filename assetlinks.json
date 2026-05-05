@@ -5,9 +5,9 @@
         ],
         "target": {
             "namespace": "android_app",
-            "package_name": "COM.SEU.APP.ID",
+            "package_name": "com.linkos.generator",
             "sha256_cert_fingerprints": [
-                "SHA256_DA_SUA_CHAVE_DE_ASSINATURA_AQUI"
+                "PENDENTE_GERAR_NA_COMPILACAO"
             ]
         }
     }
