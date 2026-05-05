@@ -177,7 +177,7 @@ textarea,
   margin-top: 10px;
 }
 
-.modeFields.is-hidden {
+.is-hidden {
   display: none;
 }
 
@@ -223,6 +223,23 @@ textarea,
   box-shadow: 0 0 0 4px rgba(12, 184, 207, 0.14);
 }
 
+#mainTextarea {
+  width: min(100%, 460px);
+  min-height: 100px;
+  padding: 12px;
+  font-size: 0.9rem;
+  border-radius: 14px;
+  border: solid 2px var(--color4);
+  background: rgba(1, 4, 25, 0.45);
+  color: var(--color6);
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  resize: vertical;
+  font-family: inherit;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
 .fieldBlock input,
 .fieldBlock select,
 .fieldBlock textarea {
@@ -236,6 +253,7 @@ textarea,
   outline: none;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
   transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  overflow-y: hidden;
 }
 
 .fieldBlock textarea {
@@ -257,12 +275,18 @@ textarea,
   box-shadow: 0 0 0 4px rgba(12, 184, 207, 0.14);
 }
 
+.textarea-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: min(100%, 460px);
+  margin-top: 4px;
+}
+
 .char-counter {
   font-size: 0.75rem;
   color: rgba(225, 226, 227, 0.6);
-  text-align: right;
-  margin-top: -4px;
-  /* Ajusta o espaçamento */
+  margin: 0;
 }
 
 .char-counter.exceeded {

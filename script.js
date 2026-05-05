@@ -4,6 +4,10 @@ const downloadButton = document.querySelector(".downloadBtn");
 const shareButton = document.querySelector("#share_btn");
 const copyButton = document.querySelector("#copy_btn");
 const textInput = document.querySelector("#text");
+const mainTextarea = document.querySelector("#mainTextarea");
+const mainTextareaCounter = document.querySelector("#mainTextareaCounter");
+const textareaFooter = document.querySelector("#textareaFooter");
+const copyTextareaBtn = document.querySelector("#copy_textarea_btn");
 const wifiFields = document.querySelector("#wifiFields");
 const wifiSsidInput = document.querySelector("#wifiSsid");
 const wifiPasswordInput = document.querySelector("#wifiPassword");
@@ -22,6 +26,7 @@ const clearHistoryBtn = document.querySelector("#clear_history");
 const QR_EXPORT_SIZE = 1500;
 const QR_PREVIEW_SIZE = 240;
 const MAX_WA_MESSAGE_LENGTH = 250;
+const MAX_TEXT_LENGTH = 1000;
 const WATERMARK_PATH = "assets/Ativo 1logo.png";
 const MAX_HISTORY = 5;
 
@@ -153,6 +158,7 @@ function saveState() {
   const state = {
     mode: getSelectedMode(),
     text: textInput.value,
+    longText: mainTextarea.value,
     wifi: {
       ssid: wifiSsidInput.value,
       pass: wifiPasswordInput.value,
@@ -175,6 +181,7 @@ function loadState() {
 
   const state = JSON.parse(saved);
   textInput.value = state.text || "";
+  mainTextarea.value = state.longText || "";
   wifiSsidInput.value = state.wifi?.ssid || "";
   wifiPasswordInput.value = state.wifi?.pass || "";
   wifiSecuritySelect.value = state.wifi?.sec || "WPA";
@@ -249,8 +256,8 @@ function buildWifiPayload() {
 }
 
 function getQrPayload() {
-  const value = textInput.value.trim();
   const mode = getSelectedMode();
+  const value = (mode === "text" ? mainTextarea.value : textInput.value).trim();
 
   if (mode === "wifi") {
     return buildWifiPayload();
@@ -428,6 +435,25 @@ async function updateQrTheme(themeName) {
   saveState();
 }
 
+function updateMainTextareaCounter() {
+  const currentLength = mainTextarea.value.length;
+  mainTextareaCounter.textContent = `${currentLength}/${MAX_TEXT_LENGTH}`;
+
+  if (currentLength > MAX_TEXT_LENGTH) {
+    if (!mainTextareaCounter.classList.contains("exceeded")) {
+      mainTextareaCounter.classList.add("shake");
+      mainTextareaCounter.addEventListener("animationend", () => {
+        mainTextareaCounter.classList.remove("shake");
+      }, { once: true });
+    }
+    mainTextareaCounter.classList.add("exceeded");
+    if (getSelectedMode() === "text") generateButton.disabled = true;
+  } else {
+    mainTextareaCounter.classList.remove("exceeded");
+    if (getSelectedMode() === "text") generateButton.disabled = false;
+  }
+}
+
 function updateWaMessageCounter() {
   const currentLength = waMessageInput.value.length;
   waMessageCounter.textContent = `${currentLength}/${MAX_WA_MESSAGE_LENGTH}`;
@@ -450,6 +476,7 @@ function updateWaMessageCounter() {
 function clearAllFields() {
   // Limpa todos os inputs
   textInput.value = "";
+  mainTextarea.value = "";
   wifiSsidInput.value = "";
   wifiPasswordInput.value = "";
   wifiSecuritySelect.value = "WPA";
@@ -458,6 +485,10 @@ function clearAllFields() {
 
   // Atualiza contadores e estado dos botões
   updateWaMessageCounter();
+  updateMainTextareaCounter();
+  
+  // Reseta altura do textarea
+  mainTextarea.style.height = "100px";
 
   // Reseta a prévia e o estado interno
   qrContainer.innerHTML = "";
@@ -474,16 +505,24 @@ function clearAllFields() {
 function updateModeFields(mode) {
   const isWifiMode = mode === "wifi";
   const isWhatsappMode = mode === "whatsapp";
+  const isTextMode = mode === "text";
 
   wifiFields.classList.toggle("is-hidden", !isWifiMode);
   whatsappFields.classList.toggle("is-hidden", !isWhatsappMode);
-  textInput.disabled = isWifiMode;
+
+  // Alterna entre Input e Textarea
+  textInput.classList.toggle("is-hidden", isTextMode);
+  mainTextarea.classList.toggle("is-hidden", !isTextMode);
+  mainTextareaCounter.classList.toggle("is-hidden", !isTextMode);
+  textareaFooter.classList.toggle("is-hidden", !isTextMode);
+  textInput.disabled = isWifiMode || isTextMode;
 
   if (mode === "url") {
     textInput.placeholder = "https://exemplo.com";
     generateButton.disabled = false;
   } else if (mode === "text") {
     textInput.placeholder = "Escreva um texto";
+    updateMainTextareaCounter();
     generateButton.disabled = false;
   } else if (mode === "whatsapp") {
     textInput.placeholder = "Ex.: +258 999999999";
@@ -517,6 +556,22 @@ textInput.addEventListener("keydown", (event) => {
     event.preventDefault();
     void generateQrCode();
   }
+});
+
+mainTextarea.addEventListener("input", () => {
+  mainTextarea.style.height = "auto";
+  mainTextarea.style.height = mainTextarea.scrollHeight + "px";
+  updateMainTextareaCounter();
+});
+
+copyTextareaBtn.addEventListener("click", () => {
+  const text = mainTextarea.value;
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    showToast("Texto copiado!");
+  }).catch(() => {
+    setStatus("Erro ao copiar texto.", true);
+  });
 });
 
 shareButton.addEventListener("click", shareQrCode);
@@ -584,6 +639,7 @@ function initApp() {
   // Elementos que receberão o estado de skeleton
   const skeletonElements = [
     textInput,
+    mainTextarea,
     generateButton,
     clearButton,
     statusMessage,

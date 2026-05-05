@@ -42,6 +42,15 @@
             id="text"
             placeholder="Escreva um texto ou cole uma URL"
           />
+          <textarea
+            id="mainTextarea"
+            class="is-hidden"
+            placeholder="Escreva seu texto aqui..."
+          ></textarea>
+          <div id="textareaFooter" class="textarea-footer is-hidden">
+            <button id="copy_textarea_btn" class="textBtn"><i class="fas fa-copy"></i> Copiar Texto</button>
+            <div id="mainTextareaCounter" class="char-counter">0/1000</div>
+          </div>
           <div class="buttonGroup">
             <button id="gr_Gen">Gerar QR Code</button>
             <button id="clear_btn" class="secondaryBtn">Limpar</button>

@@ -8,13 +8,13 @@
     "description": "Gerador de QR Code Moderno e Profissional",
     "icons": [
         {
-            "src": "assets/logo_9.png",
+            "src": "assets/Ativo 1logo.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "any maskable"
         },
         {
-            "src": "assets/logo_9.png",
+            "src": "assets/Ativo 1logo.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any maskable"
