@@ -1,17 +1,18 @@
-const CACHE_NAME = 'linkos-v4';
+const CACHE_NAME = 'linkos-pwa-v1';
 const assets = [
     './',
-    'index.html',
-    'style.css',
-    'script.js',
-    'footer.css',
-    'screen.css',
-    'manifest.json',
-    'assets/logo_9.png',
-    'assets/Ativo 1logo.svg',
-    'assets/Ativo 1logo.png',
+    './index.html',
+    './style.css',
+    './script.js',
+    './footer.css',
+    './screen.css',
+    './manifest.json',
+    './assets/icon-144.png',
+    './assets/icon-192.png',
+    './assets/icon-512.png',
+    './offline.html',
     'https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js',
-    'offline.html'
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'
 ];
 
 self.addEventListener('install', e => {

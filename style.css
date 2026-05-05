@@ -788,3 +788,30 @@ button:disabled {
   opacity: 0;
   visibility: hidden;
 }
+
+/* --- PWA Install Banner --- */
+.pwa-install-banner {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 420px;
+  background: #121429;
+  border: 1px solid var(--c1);
+  border-radius: 16px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 9999;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.pwa-install-banner img { width: 42px; height: 42px; border-radius: 10px; }
+.banner-text { flex: 1; }
+.banner-text strong { display: block; font-size: 0.95rem; color: #fff; }
+.banner-text p { font-size: 0.75rem; color: rgba(225, 226, 227, 0.6); margin: 0; }
+.banner-actions { display: flex; align-items: center; gap: 4px; }
+.banner-actions .textBtn { font-size: 0.85rem; padding: 8px; }

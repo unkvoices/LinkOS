@@ -23,6 +23,11 @@ const qrThemeInputs = document.querySelectorAll('input[name="qrTheme"]');
 const clearButton = document.querySelector("#clear_btn");
 const historyList = document.querySelector("#historyList");
 const clearHistoryBtn = document.querySelector("#clear_history");
+const installBanner = document.querySelector("#pwa-install-banner");
+const installBtn = document.querySelector("#install-pwa-btn");
+const closeBannerBtn = document.querySelector("#close-install-banner");
+
+let deferredPrompt;
 
 const QR_EXPORT_SIZE = 1500;
 const QR_PREVIEW_SIZE = 240;
@@ -587,6 +592,33 @@ pasteTextareaBtn.addEventListener("click", () => {
   }).catch(() => {
     setStatus("Erro ao colar texto. Verifique as permissões.", true);
   });
+});
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Impede o banner padrão do navegador
+  e.preventDefault();
+  // Guarda o evento para disparar depois
+  deferredPrompt = e;
+  // Mostra o nosso banner personalizado
+  installBanner.classList.remove('is-hidden');
+});
+
+installBtn.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  console.log(`User response to install: ${outcome}`);
+  deferredPrompt = null;
+  installBanner.classList.add('is-hidden');
+});
+
+closeBannerBtn.addEventListener('click', () => {
+  installBanner.classList.add('is-hidden');
+});
+
+window.addEventListener('appinstalled', () => {
+  installBanner.classList.add('is-hidden');
+  showToast("LinkOS instalado com sucesso!");
 });
 
 shareButton.addEventListener("click", shareQrCode);
