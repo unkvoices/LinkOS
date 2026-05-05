@@ -6,18 +6,22 @@
     <title>linkOS QR Generator</title>
 
     <!-- PWA & Mobile Meta Tags -->
-    <meta name="theme-color" content="#010419" />
-    <meta name="theme-color" content="#010419" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta
+      name="theme-color"
+      content="#010419"
+      media="(prefers-color-scheme: dark)"
+    />
+    <meta
+      name="theme-color"
+      content="#ffffff"
+      media="(prefers-color-scheme: light)"
+    />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta
-      name="apple-mobile-web-app-status-bar-style"
-      content="black-translucent"
-      content="black"
-    />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="apple-mobile-web-app-title" content="LinkOS" />
-    <link rel="apple-touch-icon" href="assets/logo_9.png" />
+    <link rel="apple-touch-icon" href="assets/Ativo 1logo.png" />
+    <link rel="icon" type="image/png" href="assets/Ativo 1logo.png" />
     <link rel="manifest" href="manifest.json" />
 
     <link rel="stylesheet" href="style.css" />
@@ -25,18 +29,7 @@
     <link rel="stylesheet" href="footer.css" />
   </head>
   <body>
-    <header>
-      <h1 class="logo">
-        <img src="assets/logo_9.png" alt="softsafe" />
-        <img src="assets/Ativo 1logo.svg" alt="linkOS" />
-      </h1>
-    </header>
-
     <section class="container">
-
-
-
-
       <div class="panel inputPanel">
         <div class="containerElement">
           <input
@@ -126,19 +119,28 @@
         <h4>Selecione o tema do QR code</h4>
         <form action="#" id="themeElement">
           <label for="themeClaro">
-            <input type="radio" name="qrTheme" id="themeClaro" value="claro" checked />
+            <input
+              type="radio"
+              name="qrTheme"
+              id="themeClaro"
+              value="claro"
+              checked
+            />
             <span>Claro</span>
           </label>
           <label for="themeEscuro">
-            <input type="radio" name="qrTheme" id="themeEscuro" value="escuro" />
+            <input
+              type="radio"
+              name="qrTheme"
+              id="themeEscuro"
+              value="escuro"
+            />
             <span>Escuro</span>
           </label>
         </form>
 
         <div class="actionButtons">
-          <button class="downloadBtn" type="button" disabled>
-            Download
-          </button>
+          <button class="downloadBtn" type="button" disabled>Download</button>
           <button id="copy_btn" class="shareBtn" type="button" disabled>
             Copiar
           </button>
