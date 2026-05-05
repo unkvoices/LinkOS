@@ -81,6 +81,7 @@ textarea,
   align-items: center;
   gap: 12px;
   padding-bottom: 8px;
+  animation: float 3s ease-in-out infinite;
 }
 
 .mainLogo img {
@@ -100,6 +101,11 @@ textarea,
 
 .mainLogo h1 span {
   color: var(--c1);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }
 
 .introBlock {
