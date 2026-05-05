@@ -57,7 +57,7 @@ body {
 body.no-scroll {
   height: 100dvh !important;
   overflow: hidden !important;
-  touch-action: none;
+  touch-action: none; 
 }
 
 /* Permite seleção apenas em inputs */
