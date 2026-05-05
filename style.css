@@ -74,6 +74,19 @@ textarea,
   gap: 10px;
 }
 
+.mainLogo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 8px;
+}
+
+.mainLogo img {
+  max-height: 54px;
+  width: auto;
+  filter: drop-shadow(0 0 15px rgba(12, 184, 207, 0.2));
+}
+
 .introBlock {
   width: 100%;
   display: flex;
