@@ -1,3 +1,4 @@
+/* Ajustes para Tablets e telas médias */
 @media screen and (max-width: 900px) {
   body {
     padding-top: 32px;
@@ -13,6 +14,7 @@
   }
 }
 
+/* Ajustes para Smartphones (Modo Retrato) */
 @media screen and (max-width: 680px) {
   .container {
     width: 100%;
@@ -74,6 +76,7 @@
   }
 }
 
+/* Ajustes para telas muito pequenas (iPhone SE, etc) */
 @media screen and (max-width: 420px) {
   body {
     padding: 24px 10px 16px;
@@ -159,6 +162,7 @@
   }
 }
 
+/* Ajustes para Telas Grandes / Desktops */
 @media screen and (min-width: 1200px) {
   .container {
     width: min(720px, 92vw);
