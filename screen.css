@@ -33,6 +33,7 @@
   .introBlock {
     text-align: center;
     padding: 14px 8px;
+    width: 100%;
   }
 
   .panel,
@@ -56,8 +57,6 @@
   }
 
   .containerElement input,
-  .containerElement button,
-  .downloadBtn,
   .gradientDirection,
   .watermarkPosition {
     width: 100%;
@@ -70,6 +69,11 @@
   #modeElement>label {
     width: calc(50% - 4px);
     padding: 10px 8px;
+  }
+
+  #themeElement>label {
+    width: 48px;
+    height: 48px;
   }
 
   #qrcode {
@@ -111,8 +115,16 @@
 
   .containerElement input,
   .containerElement button {
-    min-height: 48px;
-    border-radius: 12px;
+    min-height: 42px;
+    font-size: 0.85rem;
+  }
+
+  .actionButtons {
+    flex-direction: row;
+    /* Garante que fiquem na mesma linha */
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: 100%;
   }
 
   .fieldBlock input,
@@ -138,10 +150,6 @@
     width: 100%;
     min-height: min(280px, 72vw);
     border-radius: 18px;
-  }
-
-  .downloadBtn {
-    width: 100%;
   }
 
   .gradientDirection,

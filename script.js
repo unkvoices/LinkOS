@@ -548,10 +548,31 @@ modeInputs.forEach((input) => {
   });
 });
 
+function showToast(message) {
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = `<i class="fas fa-check-circle" style="color:var(--c1)"></i> ${message}`;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.classList.add('show'), 100);
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 500);
+  }, 4000);
+}
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js')
-      .then(reg => console.log('SW registrado', reg))
+      .then(reg => {
+        reg.onupdatefound = () => {
+          const installingWorker = reg.installing;
+          installingWorker.onstatechange = () => {
+            if (installingWorker.state === 'installed' && !navigator.serviceWorker.controller) {
+              showToast("LinkOS pronto para uso offline!");
+            }
+          };
+        };
+      })
       .catch(err => console.log('Erro no SW', err));
   });
 }
@@ -569,7 +590,8 @@ function initApp() {
     downloadButton,
     shareButton,
     copyButton,
-    document.querySelector('.qr_mode')
+    document.querySelector('.qr_mode'),
+    document.querySelector('#themeElement')
   ];
 
   // Aplica a classe skeleton e injeta o círculo no QR container
