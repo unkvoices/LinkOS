@@ -24,7 +24,10 @@
     <link rel="icon" type="image/png" href="assets/Ativo 1logo.png" />
     <link rel="manifest" href="manifest.json" />
 
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="screen.css" />
     <link rel="stylesheet" href="footer.css" />
@@ -68,8 +71,12 @@
             <div id="mainTextareaCounter" class="char-counter">0/1000</div>
           </div>
           <div class="buttonGroup">
-            <button id="gr_Gen">Gerar QR Code</button>
-            <button id="clear_btn" class="secondaryBtn">Limpar</button>
+            <button id="gr_Gen" title="Gerar QR Code">
+              <i class="fas fa-qrcode"></i>
+            </button>
+            <button id="clear_btn" class="secondaryBtn" title="Limpar Campos">
+              <i class="fas fa-eraser"></i>
+            </button>
           </div>
         </div>
         <div class="modeFields is-hidden" id="wifiFields">
@@ -123,19 +130,19 @@
         <form action="#" id="modeElement">
           <label for="texto">
             <input type="radio" name="qrType" id="texto" value="text" checked />
-            <span>Texto</span>
+            <span title="Texto"><i class="fas fa-font"></i></span>
           </label>
           <label for="linkUrl">
             <input type="radio" name="qrType" id="linkUrl" value="url" />
-            <span>URL</span>
+            <span title="URL"><i class="fas fa-link"></i></span>
           </label>
           <label for="whatsapp">
             <input type="radio" name="qrType" id="whatsapp" value="whatsapp" />
-            <span>WhatsApp</span>
+            <span title="WhatsApp"><i class="fab fa-whatsapp"></i></span>
           </label>
           <label for="wifi">
             <input type="radio" name="qrType" id="wifi" value="wifi" />
-            <span>Wi-fi</span>
+            <span title="Wi-Fi"><i class="fas fa-wifi"></i></span>
           </label>
         </form>
       </div>
@@ -170,12 +177,26 @@
         </form>
 
         <div class="actionButtons">
-          <button class="downloadBtn" type="button" disabled>Download</button>
-          <button id="copy_btn" class="shareBtn" type="button" disabled>
-            Copiar
+          <button class="downloadBtn" type="button" disabled title="Download">
+            <i class="fas fa-download"></i>
           </button>
-          <button id="share_btn" class="shareBtn" type="button" disabled>
-            Partilhar
+          <button
+            id="copy_btn"
+            class="shareBtn"
+            type="button"
+            disabled
+            title="Copiar"
+          >
+            <i class="fas fa-copy"></i>
+          </button>
+          <button
+            id="share_btn"
+            class="shareBtn"
+            type="button"
+            disabled
+            title="Partilhar"
+          >
+            <i class="fas fa-share-nodes"></i>
           </button>
         </div>
       </div>
@@ -183,7 +204,9 @@
       <div class="panel historyPanel">
         <div class="historyHeader">
           <h4>Histórico Recente</h4>
-          <button id="clear_history" class="textBtn">Limpar</button>
+          <button id="clear_history" class="textBtn" title="Limpar Histórico">
+            <i class="fas fa-trash-can"></i>
+          </button>
         </div>
         <div id="historyList" class="historyList">
           <p class="emptyHistory">Nenhum QR code gerado ainda.</p>
