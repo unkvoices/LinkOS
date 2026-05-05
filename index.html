@@ -116,6 +116,18 @@
             <span>Wi-fi</span>
           </label>
         </form>
+
+        <h4 style="margin-top: 20px;">Selecione o tema do QR code</h4>
+        <form action="#" id="themeElement">
+          <label for="themeClaro">
+            <input type="radio" name="qrTheme" id="themeClaro" value="claro" checked />
+            <span>Claro</span>
+          </label>
+          <label for="themeEscuro">
+            <input type="radio" name="qrTheme" id="themeEscuro" value="escuro" />
+            <span>Escuro</span>
+          </label>
+        </form>
       </div>
 
       <div class="panel previewPanel">
@@ -123,55 +135,6 @@
           Escolha um tipo, digite o conteudo e gere o QR code.
         </p>
         <div id="qrcode" aria-label="Previa do QR code"></div>
-        <div
-          class="colorPalette"
-          role="group"
-          aria-label="Paleta de cores do QR code"
-        >
-          <span class="paletteLabel">Personalizar cor</span>
-          <div class="currentColorInfo">
-            <span class="currentColorSwatch" aria-hidden="true"></span>
-            <span id="currentColorLabel">#ececec</span>
-          </div>
-          <div class="paletteOptions">
-            <button
-              class="colorSwatch is-active"
-              type="button"
-              data-preset="sunset"
-              aria-label="Sunset"
-            ></button>
-            <button
-              class="colorSwatch"
-              type="button"
-              data-preset="ember"
-              aria-label="Ember"
-            ></button>
-            <button
-              class="colorSwatch"
-              type="button"
-              data-preset="copper"
-              aria-label="Copper"
-            ></button>
-            <button
-              class="colorSwatch"
-              type="button"
-              data-preset="berry"
-              aria-label="Berry"
-            ></button>
-            <button
-              class="colorSwatch"
-              type="button"
-              data-preset="lime"
-              aria-label="Lime"
-            ></button>
-            <button
-              class="colorSwatch"
-              type="button"
-              data-preset="gold"
-              aria-label="Gold"
-            ></button>
-          </div>
-        </div>
 
         <div class="actionButtons">
           <button class="downloadBtn" type="button" disabled>

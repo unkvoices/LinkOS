@@ -13,42 +13,28 @@ const waMessageInput = document.querySelector("#waMessage");
 const waMessageCounter = document.querySelector("#waMessageCounter");
 const statusMessage = document.querySelector("#statusMessage");
 const modeInputs = document.querySelectorAll('input[name="qrType"]');
-const colorPalette = document.querySelector(".colorPalette");
-const colorSwatches = document.querySelectorAll(".colorSwatch");
-const currentColorLabel = document.querySelector("#currentColorLabel");
-const currentColorSwatch = document.querySelector(".currentColorSwatch");
+const qrThemeInputs = document.querySelectorAll('input[name="qrTheme"]');
 const clearButton = document.querySelector("#clear_btn");
 const historyList = document.querySelector("#historyList");
 const clearHistoryBtn = document.querySelector("#clear_history");
 
 const QR_EXPORT_SIZE = 1500;
 const QR_PREVIEW_SIZE = 240;
-const QR_LIGHT_COLOR = "#000000"; // Fundo preto
-const DEFAULT_PRESET = "sunset";
 const MAX_WA_MESSAGE_LENGTH = 250;
 const WATERMARK_PATH = "assets/Ativo 1logo.png";
 const MAX_HISTORY = 5;
 
-const QR_PRESETS = {
-  sunset: {
-    color: "#ececec"
+const QR_THEMES = {
+  claro: {
+    bg: "#000000",
+    dots: "#ffffff"
   },
-  ember: {
-    color: "#f5a6a5"
-  },
-  copper: {
-    color: "#da2dac"
-  },
-  berry: {
-    color: "#cf4014"
-  },
-  lime: {
-    color: "#39dab7"
-  },
-  gold: {
-    color: "#aafecf"
+  escuro: {
+    bg: "#ffffff",
+    dots: "#000000"
   }
 };
+const DEFAULT_QR_THEME = "claro";
 
 const DEFAULT_PREVIEW_TEXT = "Francisco Armando";
 
@@ -75,7 +61,7 @@ const watermarkReady = new Promise((resolve) => {
 watermarkImage.src = WATERMARK_PATH;
 
 let lastGeneratedPayload = "";
-let selectedPreset = DEFAULT_PRESET;
+let selectedQrTheme = DEFAULT_QR_THEME;
 
 function getSelectedMode() {
   return document.querySelector('input[name="qrType"]:checked')?.value || "";
@@ -160,7 +146,7 @@ function saveState() {
       hid: wifiHiddenInput.checked
     },
     wa: waMessageInput.value,
-    preset: selectedPreset,
+    qrTheme: selectedQrTheme,
     hasQr: !!lastGeneratedPayload
   };
   localStorage.setItem("linkos_state", JSON.stringify(state));
@@ -181,10 +167,14 @@ function loadState() {
   wifiHiddenInput.checked = !!state.wifi?.hid;
   waMessageInput.value = state.wa || "";
 
-  selectedPreset = state.preset || DEFAULT_PRESET;
+  selectedQrTheme = state.qrTheme || DEFAULT_QR_THEME;
 
   modeInputs.forEach(input => {
     if (input.value === state.mode) input.checked = true;
+  });
+
+  qrThemeInputs.forEach(input => {
+    if (input.value === selectedQrTheme) input.checked = true;
   });
 
   if (state.hasQr) {
@@ -296,24 +286,6 @@ function getQrPayload() {
   return value;
 }
 
-function syncActiveSwatch() {
-  const preset = QR_PRESETS[selectedPreset] || QR_PRESETS[DEFAULT_PRESET];
-
-  colorSwatches.forEach((swatch) => {
-    const isActive = swatch.dataset.preset === selectedPreset;
-    swatch.classList.toggle("is-active", isActive);
-    swatch.setAttribute("aria-pressed", String(isActive));
-  });
-
-  if (currentColorLabel) {
-    currentColorLabel.textContent = preset.color;
-  }
-
-  if (currentColorSwatch) {
-    currentColorSwatch.style.background = preset.color;
-  }
-}
-
 async function createWatermarkedCanvas(payload, size) {
   const qrRenderContainer = document.createElement("div");
 
@@ -321,10 +293,9 @@ async function createWatermarkedCanvas(payload, size) {
   qrRenderContainer.style.left = "-99999px";
   qrRenderContainer.style.top = "0";
   qrRenderContainer.style.padding = "0";
-  qrRenderContainer.style.background = QR_LIGHT_COLOR;
+  const theme = QR_THEMES[selectedQrTheme] || QR_THEMES[DEFAULT_QR_THEME];
+  qrRenderContainer.style.background = theme.bg;
   document.body.appendChild(qrRenderContainer);
-
-  const preset = QR_PRESETS[selectedPreset] || QR_PRESETS[DEFAULT_PRESET];
 
   const qrCode = new QRCodeStyling({
     width: size,
@@ -336,10 +307,10 @@ async function createWatermarkedCanvas(payload, size) {
     },
     dotsOptions: {
       type: "rounded", // Cantos arredondados!
-      color: preset.color // Usando a cor sólida do preset
+      color: theme.dots
     },
     backgroundOptions: {
-      color: QR_LIGHT_COLOR
+      color: theme.bg
     },
     image: WATERMARK_PATH,
     imageOptions: {
@@ -419,23 +390,22 @@ async function downloadQrCode() {
   URL.revokeObjectURL(downloadLink.href);
 }
 
-async function updateQrPreset(presetName) {
-  selectedPreset = QR_PRESETS[presetName] ? presetName : DEFAULT_PRESET;
-  syncActiveSwatch();
+async function updateQrTheme(themeName) {
+  selectedQrTheme = QR_THEMES[themeName] ? themeName : DEFAULT_QR_THEME;
 
   if (!lastGeneratedPayload) {
-    setStatus("Paleta atualizada. Gere um QR code para visualizar.", false);
+    setStatus("Tema do QR atualizado. Gere um QR code para visualizar.", false);
     return;
   }
 
   const rendered = await renderQrCode(lastGeneratedPayload);
 
   if (!rendered) {
-    setStatus("Nao foi possivel aplicar a nova paleta.", true);
+    setStatus("Nao foi possivel aplicar o novo tema.", true);
     return;
   }
 
-  setStatus("Gradiente do QR code atualizado.");
+  setStatus("Tema do QR code atualizado.");
   saveState();
 }
 
@@ -535,9 +505,9 @@ waMessageInput.addEventListener("input", () => {
   updateWaMessageCounter();
 });
 
-colorSwatches.forEach((swatch) => {
-  swatch.addEventListener("click", () => {
-    void updateQrPreset(swatch.dataset.preset);
+qrThemeInputs.forEach((input) => {
+  input.addEventListener("change", () => {
+    void updateQrTheme(input.value);
   });
 });
 
@@ -565,7 +535,6 @@ if ('serviceWorker' in navigator) {
 }
 
 function initApp() {
-  syncActiveSwatch();
   updateModeFields(getSelectedMode());
   renderHistory();
 
@@ -577,7 +546,6 @@ function initApp() {
     statusMessage,
     downloadButton,
     shareButton,
-    colorPalette,
     document.querySelector('.qr_mode')
   ];
 

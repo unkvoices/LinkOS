@@ -58,7 +58,6 @@
   .containerElement input,
   .containerElement button,
   .downloadBtn,
-  .colorPalette,
   .gradientDirection,
   .watermarkPosition {
     width: 100%;
@@ -145,7 +144,6 @@
     width: 100%;
   }
 
-  .colorPalette,
   .gradientDirection,
   .watermarkPosition {
     padding-inline: 14px;

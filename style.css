@@ -352,14 +352,16 @@ header {
   font-weight: 700;
 }
 
-#modeElement {
+#modeElement,
+#themeElement {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
   justify-content: center;
 }
 
-#modeElement>label {
+#modeElement>label,
+#themeElement>label {
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -373,16 +375,19 @@ header {
   transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
 }
 
-#modeElement>label:hover {
+#modeElement>label:hover,
+#themeElement>label:hover {
   border-color: rgba(12, 184, 207, 0.35);
   background: rgba(12, 184, 207, 0.08);
 }
 
-#modeElement input[type="radio"] {
+#modeElement input[type="radio"],
+#themeElement input[type="radio"] {
   accent-color: var(--c1);
 }
 
-#modeElement>label:has(input:checked) {
+#modeElement>label:has(input:checked),
+#themeElement>label:has(input:checked) {
   border-color: rgba(12, 184, 207, 0.7);
   background: linear-gradient(180deg, rgba(12, 184, 207, 0.18), rgba(12, 184, 207, 0.08));
   box-shadow: 0 0 0 1px rgba(12, 184, 207, 0.16) inset;
@@ -393,85 +398,6 @@ header {
   flex-direction: column;
   align-items: center;
   gap: 14px;
-}
-
-.colorPalette {
-  width: min(100%, 360px);
-  padding: 10px 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 12px;
-  border-radius: 22px;
-  border: 1px solid rgba(12, 184, 207, 0.28);
-  background: linear-gradient(180deg, rgba(12, 184, 207, 0.1), rgba(8, 127, 143, 0.08));
-  color: var(--color6);
-  font-weight: 600;
-}
-
-.paletteLabel {
-  font-size: 0.95rem;
-}
-
-.currentColorInfo {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  font-size: 0.92rem;
-  color: rgba(255, 255, 255, 0.85);
-}
-
-.currentColorSwatch {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: #ececec;
-}
-
-.paletteOptions {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.colorSwatch {
-  width: 34px;
-  height: 34px;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1) inset;
-  transition: transform 160ms ease, box-shadow 160ms ease, outline-color 160ms ease;
-}
-
-.colorSwatch.is-hidden {
-  display: none;
-}
-
-.colorPalette.is-expanded .colorSwatch.is-hidden {
-  display: inline-block;
-}
-
-.colorSwatch:hover {
-  transform: translateY(-1px);
-}
-
-.colorSwatch:focus-visible {
-  outline: 2px solid rgba(12, 184, 207, 0.75);
-  outline-offset: 3px;
-}
-
-.colorSwatch.is-active {
-  box-shadow:
-    0 0 0 2px rgba(255, 255, 255, 0.12) inset,
-    0 0 0 3px rgba(12, 184, 207, 0.7);
 }
 
 #statusMessage {
