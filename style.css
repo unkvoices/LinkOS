@@ -78,6 +78,8 @@ textarea,
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 12px;
   padding-bottom: 8px;
 }
 
@@ -85,6 +87,19 @@ textarea,
   max-height: 54px;
   width: auto;
   filter: drop-shadow(0 0 15px rgba(12, 184, 207, 0.2));
+}
+
+.mainLogo h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--color6);
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-transform: none;
+}
+
+.mainLogo h1 span {
+  color: var(--c1);
 }
 
 .introBlock {
