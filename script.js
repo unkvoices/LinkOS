@@ -2,6 +2,7 @@ const qrContainer = document.querySelector("#qrcode");
 const generateButton = document.querySelector("#gr_Gen");
 const downloadButton = document.querySelector(".downloadBtn");
 const shareButton = document.querySelector("#share_btn");
+const copyButton = document.querySelector("#copy_btn");
 const textInput = document.querySelector("#text");
 const wifiFields = document.querySelector("#wifiFields");
 const wifiSsidInput = document.querySelector("#wifiSsid");
@@ -133,6 +134,19 @@ async function shareQrCode() {
     try { await navigator.share({ files: [file], title: 'Meu QR Code', text: 'Gerado via linkOS' }); }
     catch (err) { console.error("Erro ao compartilhar:", err); }
   } else { setStatus("Seu navegador não suporta compartilhamento de arquivos.", true); }
+}
+
+async function copyQrCode() {
+  if (!lastGeneratedPayload) return;
+  try {
+    const blob = await createWatermarkedCanvas(lastGeneratedPayload, QR_EXPORT_SIZE);
+    const item = new ClipboardItem({ [blob.type]: blob });
+    await navigator.clipboard.write([item]);
+    setStatus("QR Code copiado para a área de transferência!");
+  } catch (err) {
+    console.error("Erro ao copiar:", err);
+    setStatus("Não foi possível copiar a imagem.", true);
+  }
 }
 
 function saveState() {
@@ -349,6 +363,8 @@ async function generateQrCode() {
 
   if (!payload) {
     downloadButton.disabled = true;
+    copyButton.disabled = true;
+    shareButton.disabled = true;
     lastGeneratedPayload = "";
     return;
   }
@@ -357,12 +373,15 @@ async function generateQrCode() {
 
   if (!rendered) {
     downloadButton.disabled = true;
+    copyButton.disabled = true;
+    shareButton.disabled = true;
     lastGeneratedPayload = "";
     return;
   }
 
   lastGeneratedPayload = payload;
   downloadButton.disabled = false;
+  copyButton.disabled = false;
   shareButton.disabled = false;
   setStatus("QR code gerado com sucesso.");
   saveState();
@@ -444,6 +463,7 @@ function clearAllFields() {
   qrContainer.innerHTML = "";
   lastGeneratedPayload = "";
   downloadButton.disabled = true;
+  copyButton.disabled = true;
   shareButton.disabled = true;
   generateButton.disabled = false;
   localStorage.removeItem("linkos_state");
@@ -501,6 +521,8 @@ textInput.addEventListener("keydown", (event) => {
 
 shareButton.addEventListener("click", shareQrCode);
 
+copyButton.addEventListener("click", copyQrCode);
+
 waMessageInput.addEventListener("input", () => {
   updateWaMessageCounter();
 });
@@ -546,6 +568,7 @@ function initApp() {
     statusMessage,
     downloadButton,
     shareButton,
+    copyButton,
     document.querySelector('.qr_mode')
   ];
 

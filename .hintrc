@@ -4,6 +4,7 @@
   ],
   "hints": {
     "axe/aria": "off",
-    "compat-api/css": "off"
+    "compat-api/css": "off",
+    "compat-api/html": "off"
   }
 }

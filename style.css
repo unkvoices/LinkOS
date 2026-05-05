@@ -429,14 +429,15 @@ header {
 
 .actionButtons {
   display: flex;
-  gap: 12px;
-  width: min(100%, 360px);
+  gap: 8px;
+  width: min(100%, 460px);
 }
 
 .shareBtn {
   flex: 1;
   min-height: 48px;
-  padding: 10px 20px;
+  padding: 10px 8px;
+  font-size: 0.9rem;
   font-weight: 600;
   border-radius: 999px;
   border: 1px solid rgba(12, 184, 207, 0.4);
@@ -526,9 +527,10 @@ header {
 }
 
 .downloadBtn {
-  width: min(100%, 360px);
+  flex: 1;
   min-height: 48px;
-  padding: 10px 20px;
+  padding: 10px 8px;
+  font-size: 0.9rem;
   font-weight: 600;
   border-radius: 999px;
   border: 1px solid rgba(12, 184, 207, 0.28);
