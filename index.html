@@ -24,6 +24,7 @@
     <link rel="icon" type="image/png" href="assets/Ativo 1logo.png" />
     <link rel="manifest" href="manifest.json" />
 
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="screen.css" />
     <link rel="stylesheet" href="footer.css" />
@@ -48,7 +49,22 @@
             placeholder="Escreva seu texto aqui..."
           ></textarea>
           <div id="textareaFooter" class="textarea-footer is-hidden">
-            <button id="copy_textarea_btn" class="textBtn"><i class="fas fa-copy"></i> Copiar Texto</button>
+            <div class="footer-actions">
+              <button
+                id="copy_textarea_btn"
+                class="textBtn"
+                title="Copiar Texto"
+              >
+                <i class="fas fa-copy"></i>
+              </button>
+              <button
+                id="paste_textarea_btn"
+                class="textBtn"
+                title="Colar Texto"
+              >
+                <i class="fas fa-paste"></i>
+              </button>
+            </div>
             <div id="mainTextareaCounter" class="char-counter">0/1000</div>
           </div>
           <div class="buttonGroup">

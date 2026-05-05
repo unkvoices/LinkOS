@@ -8,6 +8,7 @@ const mainTextarea = document.querySelector("#mainTextarea");
 const mainTextareaCounter = document.querySelector("#mainTextareaCounter");
 const textareaFooter = document.querySelector("#textareaFooter");
 const copyTextareaBtn = document.querySelector("#copy_textarea_btn");
+const pasteTextareaBtn = document.querySelector("#paste_textarea_btn");
 const wifiFields = document.querySelector("#wifiFields");
 const wifiSsidInput = document.querySelector("#wifiSsid");
 const wifiPasswordInput = document.querySelector("#wifiPassword");
@@ -571,6 +572,18 @@ copyTextareaBtn.addEventListener("click", () => {
     showToast("Texto copiado!");
   }).catch(() => {
     setStatus("Erro ao copiar texto.", true);
+  });
+});
+
+pasteTextareaBtn.addEventListener("click", () => {
+  navigator.clipboard.readText().then(text => {
+    if (text) {
+      mainTextarea.value = text;
+      mainTextarea.dispatchEvent(new Event('input'));
+      showToast("Texto colado!");
+    }
+  }).catch(() => {
+    setStatus("Erro ao colar texto. Verifique as permissões.", true);
   });
 });
 

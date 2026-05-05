@@ -283,6 +283,11 @@ textarea,
   margin-top: 4px;
 }
 
+.footer-actions {
+  display: flex;
+  gap: 12px;
+}
+
 .char-counter {
   font-size: 0.75rem;
   color: rgba(225, 226, 227, 0.6);
@@ -729,9 +734,9 @@ textarea,
 
 .toast {
   position: fixed;
-  bottom: 24px;
+  top: 15px;
   left: 50%;
-  transform: translateX(-50%) translateY(100px);
+  transform: translateX(-50%) translateY(-500px);
   background: var(--color2);
   border: 1px solid var(--c1);
   color: var(--color6);
