@@ -27,7 +27,7 @@ const clearHistoryBtn = document.querySelector("#clear_history");
 const QR_EXPORT_SIZE = 1500;
 const QR_PREVIEW_SIZE = 240;
 const MAX_WA_MESSAGE_LENGTH = 250;
-const MAX_TEXT_LENGTH = 1000;
+const MAX_TEXT_LENGTH = 150;
 const WATERMARK_PATH = "assets/Ativo 1logo.png";
 const MAX_HISTORY = 5;
 
