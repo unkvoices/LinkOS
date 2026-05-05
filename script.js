@@ -1,3 +1,4 @@
+/** Seleção de Elementos da Interface **/
 const qrContainer = document.querySelector("#qrcode");
 const generateButton = document.querySelector("#gr_Gen");
 const downloadButton = document.querySelector(".downloadBtn");
@@ -29,12 +30,14 @@ const closeBannerBtn = document.querySelector("#close-install-banner");
 
 let deferredPrompt;
 
+/** Configurações do Gerador **/
 const QR_EXPORT_SIZE = 1500;
 const QR_PREVIEW_SIZE = 240;
 const MAX_WA_MESSAGE_LENGTH = 250;
 const MAX_TEXT_LENGTH = 150;
 const WATERMARK_PATH = "assets/Ativo 1logo.png";
 const MAX_HISTORY = 5;
+const DEFAULT_PREVIEW_TEXT = "Francisco Armando";
 
 const QR_THEMES = {
   claro: {
@@ -48,8 +51,7 @@ const QR_THEMES = {
 };
 const DEFAULT_QR_THEME = "claro";
 
-const DEFAULT_PREVIEW_TEXT = "Francisco Armando";
-
+/** Gera uma prévia padrão ao iniciar ou resetar **/
 async function renderDefaultPreview() {
   const blob = await createWatermarkedCanvas(DEFAULT_PREVIEW_TEXT, QR_PREVIEW_SIZE);
   const imageUrl = URL.createObjectURL(blob);
@@ -61,6 +63,7 @@ async function renderDefaultPreview() {
   setStatus("QR padrão carregado. Digite um texto e gere o seu.");
 }
 
+/** Carregamento da Marca d'água (Logo Central) **/
 const watermarkImage = new Image();
 const watermarkReady = new Promise((resolve) => {
   watermarkImage.onload = () => resolve(watermarkImage);
@@ -75,15 +78,18 @@ watermarkImage.src = WATERMARK_PATH;
 let lastGeneratedPayload = "";
 let selectedQrTheme = DEFAULT_QR_THEME;
 
+/** Obtém o modo selecionado (texto, url, wifi, whatsapp) **/
 function getSelectedMode() {
   return document.querySelector('input[name="qrType"]:checked')?.value || "";
 }
 
+/** Atualiza a mensagem de status na UI **/
 function setStatus(message, isError = false) {
   statusMessage.textContent = message;
   statusMessage.classList.toggle("error", isError);
 }
 
+/** Gerenciamento do Histórico Local **/
 function addToHistory(payload, mode) {
   let history = JSON.parse(localStorage.getItem("linkos_history") || "[]");
   const newItem = {
@@ -102,6 +108,7 @@ function addToHistory(payload, mode) {
   renderHistory();
 }
 
+/** Renderiza a lista de itens do histórico no HTML **/
 function renderHistory() {
   const history = JSON.parse(localStorage.getItem("linkos_history") || "[]");
   if (history.length === 0) {
@@ -117,6 +124,7 @@ function renderHistory() {
   `).join('');
 }
 
+/** Carrega um item do histórico de volta para os campos **/
 window.loadHistoryItem = (index) => {
   const history = JSON.parse(localStorage.getItem("linkos_history") || "[]");
   const item = history[index];
@@ -137,6 +145,7 @@ window.loadHistoryItem = (index) => {
   generateQrCode();
 };
 
+/** Compartilha o QR Code gerado (Nativo Mobile) **/
 async function shareQrCode() {
   if (!lastGeneratedPayload) return;
   const blob = await createWatermarkedCanvas(lastGeneratedPayload, QR_EXPORT_SIZE);
@@ -147,6 +156,7 @@ async function shareQrCode() {
   } else { setStatus("Seu navegador não suporta compartilhamento de arquivos.", true); }
 }
 
+/** Copia a imagem do QR Code para a área de transferência **/
 async function copyQrCode() {
   if (!lastGeneratedPayload) return;
   try {
@@ -160,6 +170,7 @@ async function copyQrCode() {
   }
 }
 
+/** Salva o estado atual dos campos no LocalStorage **/
 function saveState() {
   const state = {
     mode: getSelectedMode(),
@@ -178,6 +189,7 @@ function saveState() {
   localStorage.setItem("linkos_state", JSON.stringify(state));
 }
 
+/** Carrega o estado salvo anteriormente **/
 function loadState() {
   const saved = localStorage.getItem("linkos_state");
   if (!saved) {
@@ -211,6 +223,7 @@ function loadState() {
   }
 }
 
+/** Normaliza URLs adicionando https:// caso falte **/
 function normalizeUrl(value) {
   const trimmed = value.trim();
 
@@ -225,6 +238,7 @@ function normalizeUrl(value) {
   return `https://${trimmed}`;
 }
 
+/** Validação simples de URL **/
 function isValidUrl(value) {
   try {
     const parsed = new URL(value);
@@ -234,10 +248,12 @@ function isValidUrl(value) {
   }
 }
 
+/** Escapa caracteres especiais para o protocolo WIFI **/
 function escapeWifiValue(value) {
   return value.replace(/([\\;,:"])/g, "\\$1");
 }
 
+/** Constrói o Payload para redes Wi-Fi **/
 function buildWifiPayload() {
   const ssid = wifiSsidInput.value.trim();
   const password = wifiPasswordInput.value.trim();
@@ -261,6 +277,7 @@ function buildWifiPayload() {
   return `WIFI:T:${security};S:${escapedSsid};P:${escapedPassword};H:${hiddenValue};;`;
 }
 
+/** Coleta os dados dos campos conforme o modo e retorna a string do QR Code **/
 function getQrPayload() {
   const mode = getSelectedMode();
   const value = (mode === "text" ? mainTextarea.value : textInput.value).trim();
@@ -313,6 +330,7 @@ function getQrPayload() {
   return value;
 }
 
+/** Gera o Canvas do QR Code usando a biblioteca QRCodeStyling com a marca d'água **/
 async function createWatermarkedCanvas(payload, size) {
   const qrRenderContainer = document.createElement("div");
 
@@ -354,6 +372,7 @@ async function createWatermarkedCanvas(payload, size) {
   });
 }
 
+/** Renderiza o QR Code na tela (Previa) **/
 async function renderQrCode(payload) {
   qrContainer.innerHTML = "";
   const blob = await createWatermarkedCanvas(payload, QR_PREVIEW_SIZE);
@@ -371,6 +390,7 @@ async function renderQrCode(payload) {
   return true;
 }
 
+/** Orquestra a geração do QR Code e atualiza os botões **/
 async function generateQrCode() {
   const payload = getQrPayload();
 
@@ -401,6 +421,7 @@ async function generateQrCode() {
   addToHistory(payload, getSelectedMode());
 }
 
+/** Realiza o download do QR Code em alta resolução **/
 async function downloadQrCode() {
   const downloadLink = document.createElement("a");
 
@@ -422,6 +443,7 @@ async function downloadQrCode() {
   URL.revokeObjectURL(downloadLink.href);
 }
 
+/** Atualiza o esquema de cores do QR Code **/
 async function updateQrTheme(themeName) {
   selectedQrTheme = QR_THEMES[themeName] ? themeName : DEFAULT_QR_THEME;
 
@@ -441,6 +463,7 @@ async function updateQrTheme(themeName) {
   saveState();
 }
 
+/** Atualiza contador de caracteres do Textarea principal **/
 function updateMainTextareaCounter() {
   const currentLength = mainTextarea.value.length;
   mainTextareaCounter.textContent = `${currentLength}/${MAX_TEXT_LENGTH}`;
@@ -460,6 +483,7 @@ function updateMainTextareaCounter() {
   }
 }
 
+/** Atualiza contador de caracteres da mensagem de WhatsApp **/
 function updateWaMessageCounter() {
   const currentLength = waMessageInput.value.length;
   waMessageCounter.textContent = `${currentLength}/${MAX_WA_MESSAGE_LENGTH}`;
@@ -479,6 +503,7 @@ function updateWaMessageCounter() {
   }
 }
 
+/** Limpa todos os campos da aplicação **/
 function clearAllFields() {
   // Limpa todos os inputs
   textInput.value = "";
@@ -492,7 +517,7 @@ function clearAllFields() {
   // Atualiza contadores e estado dos botões
   updateWaMessageCounter();
   updateMainTextareaCounter();
-  
+
   // Reseta altura do textarea
   mainTextarea.style.height = "100px";
 
@@ -508,6 +533,7 @@ function clearAllFields() {
   setStatus("Campos limpos. Escolha um tipo e digite o conteúdo.");
 }
 
+/** Alterna a exibição dos campos dependendo do tipo de QR selecionado **/
 function updateModeFields(mode) {
   const isWifiMode = mode === "wifi";
   const isWhatsappMode = mode === "whatsapp";
@@ -544,6 +570,7 @@ function updateModeFields(mode) {
   }
 }
 
+/** Event Listeners **/
 generateButton.addEventListener("click", () => {
   void generateQrCode();
 });
@@ -603,6 +630,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
   installBanner.classList.remove('is-hidden');
 });
 
+/** Lógica de instalação PWA **/
 installBtn.addEventListener('click', async () => {
   if (!deferredPrompt) return;
   deferredPrompt.prompt();
@@ -635,8 +663,7 @@ qrThemeInputs.forEach((input) => {
   });
 });
 
-
-
+/** Mostra notificação Toast temporária **/
 function showToast(message) {
   const toast = document.createElement('div');
   toast.className = 'toast';
@@ -649,6 +676,7 @@ function showToast(message) {
   }, 4000);
 }
 
+/** Registro do Service Worker **/
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js')
@@ -675,6 +703,7 @@ const SPLASH_PHRASES = [
   "Quase lá..."
 ];
 
+/** Inicialização do App com simulação de carregamento (Skeletons) **/
 function initApp() {
   const splash = document.getElementById('splash-screen');
   const phraseEl = document.getElementById('splash-phrase');
@@ -706,7 +735,7 @@ function initApp() {
 
   // Aguarda 2 segundos (simulação de carregamento)
   const minWait = new Promise(resolve => setTimeout(resolve, 2000));
-  
+
   // Otimização de fontes: espera o navegador carregar as fontes antes de prosseguir
   Promise.all([minWait, document.fonts.ready]).then(() => {
     // Remove bloqueios e inicia a transição de nitidez (blur -> sharp)
