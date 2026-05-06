@@ -1,3 +1,4 @@
+/* Variáveis de cores e configurações globais do tema */
 :root {
   --color1: #010419;
   --color2: #121429;
@@ -18,6 +19,7 @@
   --font: poppins;
 }
 
+/* Reset básico de CSS e box-sizing */
 *,
 *::after,
 *::before {
@@ -34,6 +36,7 @@ html {
   overflow-x: hidden;
 }
 
+/* Configurações globais do corpo da página */
 body {
   font-family: var(--font), sans-serif;
   min-height: 100vh;
@@ -46,18 +49,17 @@ body {
     radial-gradient(circle at 50% -10%, rgba(12, 184, 207, 0.08), transparent 40%),
     #01030d;
   color: var(--color6);
+  /* Suporte para safe area (notch) em dispositivos móveis */
   padding: 40px 16px env(safe-area-inset-bottom, 24px);
-  /* Suporte para notch de iPhones */
   user-select: none;
   animation: fadeIn 0.8s ease-out forwards;
-  /* Evita seleção de texto acidental, comum em apps */
 }
 
 /* Bloqueio de scroll durante o splash */
 body.no-scroll {
   height: 100dvh !important;
   overflow: hidden !important;
-  touch-action: none;
+  touch-action: none; 
 }
 
 /* Permite seleção apenas em inputs */
@@ -67,6 +69,7 @@ textarea,
   user-select: text;
 }
 
+/* Container principal do gerador */
 .container {
   display: flex;
   flex-direction: column;
@@ -90,6 +93,7 @@ body.is-loading .container {
   opacity: 0.3;
 }
 
+/* Estilização da Logo Principal */
 .mainLogo {
   width: 100%;
   display: flex;
@@ -119,6 +123,7 @@ body.is-loading .container {
   color: var(--c1);
 }
 
+/* Definições de animações */
 @keyframes float {
 
   0%,
@@ -143,6 +148,7 @@ body.is-loading .container {
   }
 }
 
+/* Bloco de introdução (atualmente comentado no HTML) */
 .introBlock {
   width: 100%;
   display: flex;
@@ -180,6 +186,7 @@ body.is-loading .container {
   color: rgba(225, 226, 227, 0.72);
 }
 
+/* Painéis genéricos para agrupar elementos */
 .panel {
   width: 100%;
   border: 1px solid var(--border-soft);
@@ -214,6 +221,7 @@ body.is-loading .container {
   display: grid;
   gap: 12px;
 }
+/* Blocos de campos de entrada individuais */
 
 .fieldBlock {
   display: flex;
@@ -228,6 +236,7 @@ body.is-loading .container {
   font-size: clamp(0.75rem, 2vw, 0.82rem);
 }
 
+/* Estilização de inputs e campos de texto */
 .containerElement input {
   min-height: 42px;
   padding: 8px 12px;
@@ -323,6 +332,7 @@ body.is-loading .container {
   /* Cor vermelha para limite excedido */
 }
 
+/* Estilização de checkboxes */
 
 .fieldCheck {
   display: flex;
@@ -340,6 +350,7 @@ body.is-loading .container {
   accent-color: var(--c1);
 }
 
+/* Grupo de botões de ação abaixo do input */
 .buttonGroup {
   display: flex;
   gap: 12px;
@@ -394,6 +405,7 @@ button:disabled {
   filter: grayscale(1);
 }
 
+/* Configuração da seleção de modo do QR Code */
 .qr_mode {
   width: 100%;
   margin: 0;
@@ -464,6 +476,7 @@ button:disabled {
   box-shadow: 0 0 0 1px rgba(12, 184, 207, 0.16) inset;
 }
 
+/* Temas Visuais do QR Code (Claro/Escuro) */
 #themeElement>label:has(input[value="claro"]:checked) {
   border-color: rgba(255, 255, 255, 0.6);
   background: rgba(255, 255, 255, 0.12);
@@ -478,6 +491,7 @@ button:disabled {
   color: rgba(255, 255, 255, 0.8);
 }
 
+/* Painel de Visualização do QR Code Gerado */
 .previewPanel {
   display: flex;
   flex-direction: column;
@@ -512,6 +526,7 @@ button:disabled {
   padding: 18px;
 }
 
+/* Botões de ação do QR Code (Download, Copiar, Partilhar) */
 .actionButtons {
   display: flex;
   gap: 8px;
@@ -520,6 +535,7 @@ button:disabled {
   justify-content: center;
 }
 
+/* Painel de Histórico */
 .historyPanel {
   margin-top: 8px;
   padding: 16px;
@@ -600,7 +616,7 @@ button:disabled {
 }
 
 
-/* --- Modern Skeleton Loaders --- */
+/* Efeito Skeleton Loader para carregamento inicial */
 .skeleton {
   position: relative;
   overflow: hidden;
@@ -713,7 +729,7 @@ button:disabled {
   transform: translateX(-50%) translateY(0);
 }
 
-/* --- Splash Screen Styles --- */
+/* Estilos da Tela de Splash (Inicialização) */
 #splash-screen {
   position: fixed;
   top: 0;
@@ -789,7 +805,7 @@ button:disabled {
   visibility: hidden;
 }
 
-/* --- PWA Install Banner --- */
+/* Banner de Instalação PWA */
 .pwa-install-banner {
   position: fixed;
   bottom: 24px;

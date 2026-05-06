@@ -111,11 +111,24 @@ function renderHistory() {
 
   historyList.innerHTML = history.map((item, index) => `
     <div class="historyItem" onclick="loadHistoryItem(${index})">
-      <span>${item.mode.toUpperCase()}: ${item.payload.substring(0, 20)}${item.payload.length > 20 ? '...' : ''}</span>
-      <small>${item.timestamp}</small>
+      <div class="historyInfo">
+        <span>${item.mode.toUpperCase()}: ${item.payload.substring(0, 20)}${item.payload.length > 20 ? '...' : ''}</span>
+        <small>${item.timestamp}</small>
+      </div>
+      <button class="deleteItemBtn" onclick="deleteHistoryItem(event, ${index})" title="Remover item">
+        <i class="fas fa-xmark"></i>
+      </button>
     </div>
   `).join('');
 }
+
+window.deleteHistoryItem = (event, index) => {
+  event.stopPropagation(); // Impede que o item seja carregado ao clicar no botão de excluir
+  let history = JSON.parse(localStorage.getItem("linkos_history") || "[]");
+  history.splice(index, 1);
+  localStorage.setItem("linkos_history", JSON.stringify(history));
+  renderHistory();
+};
 
 window.loadHistoryItem = (index) => {
   const history = JSON.parse(localStorage.getItem("linkos_history") || "[]");
@@ -627,6 +640,12 @@ copyButton.addEventListener("click", copyQrCode);
 
 waMessageInput.addEventListener("input", () => {
   updateWaMessageCounter();
+});
+
+modeInputs.forEach((input) => {
+  input.addEventListener("change", () => {
+    updateModeFields(input.value);
+  });
 });
 
 qrThemeInputs.forEach((input) => {

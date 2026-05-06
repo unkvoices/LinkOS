@@ -1,3 +1,4 @@
+/* Nome do Cache e Ativos para armazenamento offline */
 const CACHE_NAME = 'linkos-pwa-v5';
 const assets = [
     '/',
@@ -18,6 +19,7 @@ const assets = [
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'
 ];
 
+/* Evento de Instalação: Salva arquivos no cache */
 self.addEventListener('install', e => {
     e.waitUntil(
         caches.open(CACHE_NAME).then(cache => {
@@ -34,6 +36,7 @@ self.addEventListener('install', e => {
     );
 });
 
+/* Evento de Ativação: Limpa versões antigas do cache */
 self.addEventListener('activate', e => {
     e.waitUntil(
         caches.keys().then(keys => {
@@ -44,6 +47,7 @@ self.addEventListener('activate', e => {
     );
 });
 
+/* Evento de Fetch: Estratégia de Cache First (Cache primeiro, depois rede) */
 self.addEventListener('fetch', e => {
     e.respondWith(
         caches.match(e.request).then(res => {
