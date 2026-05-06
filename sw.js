@@ -50,10 +50,11 @@ self.addEventListener('activate', e => {
 /* Evento de Fetch: Estratégia de Cache First (Cache primeiro, depois rede) */
 self.addEventListener('fetch', e => {
     e.respondWith(
-        caches.match(e.request).then(res => {
+        caches.match(e.request, { ignoreSearch: true }).then(res => {
             return res || fetch(e.request).catch(() => {
                 if (e.request.mode === 'navigate') return caches.match('offline.html');
+                return null; // Deixa o navegador lidar com a falha de recursos não-essenciais
             });
-        })
+        }).then(res => res || Response.error()) // Garante que sempre retorne um Response
     );
 });
