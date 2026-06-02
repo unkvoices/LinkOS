@@ -1,20 +1,22 @@
 /* Nome do Cache e Ativos para armazenamento offline */
 const CACHE_NAME = 'linkos-pwa-v5';
+
+//l
 const assets = [
     '/',
-    'index.html',
-    'style.css',
-    'script.js',
-    'footer.css',
-    'screen.css',
-    'manifest.json',
+    'assets/index.html', 
+    'assets/style.css',
+    'assets/script.js',
+    'assets/footer.css',
+    'assets/screen.css',
+    'assets/manifest.json',
     'assets/Ativo%201logo.png',
     'assets/icon32.png',
     'assets/icon144.png',
     'assets/icon180.png',
     'assets/icon192.png',
     'assets/icon512.png',
-    'offline.html',
+    'assets/offline.html',
     'https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'
 ];
